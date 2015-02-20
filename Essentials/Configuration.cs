@@ -9,9 +9,14 @@ namespace Essentials
 {
     public class Configuration : RocketConfiguration
     {
-        public bool EnabledAutoSave;
-        public int AutoSaveInterval;
-        public string AutoSaveMessage;
+        public AutoSave ConfigAutoSave;
+
+        public class AutoSave
+        {
+            public bool Enabled;
+            public int Interval;
+            public string Message;
+        }
 
         public RocketConfiguration DefaultConfiguration
         {
@@ -19,9 +24,12 @@ namespace Essentials
             {
                 return new Configuration
                 {
-                    EnabledAutoSave = true,
-                    AutoSaveInterval = 600,
-                    AutoSaveMessage = "服务器自动保存完成"
+                    ConfigAutoSave = new AutoSave
+                    {
+                        Enabled = true,
+                        Interval = 600,
+                        Message = "服务器自动保存完成"
+                    }
                 };
             }
         }

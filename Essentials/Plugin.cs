@@ -22,19 +22,16 @@ namespace Essentials
 
         public void autoSave()
         {
-            if(RocketPlugin<Configuration>.Configuration.EnabledAutoSave)
+            if(RocketPlugin.Loaded && RocketPlugin<Configuration>.Configuration.ConfigAutoSave != null && RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Enabled)
             {
-                if(RocketPlugin.Loaded)
+                if(!this.autosavetime.HasValue)
                 {
-                    if(!this.autosavetime.HasValue)
-                    {
-                        this.autosavetime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.AutoSaveInterval);
-                    }
-                    if(DateTime.Now >= autosavetime) {
-                        SaveManager.save();
-                        RocketChatManager.Say(RocketPlugin<Configuration>.Configuration.AutoSaveMessage);
-                        this.autosavetime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.AutoSaveInterval);
-                    }
+                    this.autosavetime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Interval);
+                }
+                if(DateTime.Now >= autosavetime) {
+                    SaveManager.save();
+                    RocketChatManager.Say(RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Message);
+                    this.autosavetime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Interval);
                 }
             }
         }
