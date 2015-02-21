@@ -19,7 +19,7 @@ namespace Essentials.Commands
 
         protected override void execute(SteamPlayerID sender, string args)
         {
-            if(args.Length != 0)
+            if (!string.IsNullOrEmpty(args))
             {
                 SteamPlayer p;
                 if (SteamPlayerlist.tryGetSteamPlayer(args, out p))
@@ -37,7 +37,7 @@ namespace Essentials.Commands
             }
             else
             {
-                RocketChatManager.Say(sender.CSteamID, base.commandHelp);
+                RocketChatManager.Say(sender.CSteamID, base.commandInfo);
             }
             base.execute(sender, args);
         }

@@ -35,7 +35,7 @@ namespace Essentials.Commands
             }
             else
             {
-                RocketChatManager.Say(sender.CSteamID, base.commandHelp);
+                RocketChatManager.Say(sender.CSteamID, base.commandInfo);
             }
             base.execute(sender, args);
         }

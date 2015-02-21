@@ -20,41 +20,48 @@ namespace Essentials.Commands
 
         protected override void execute(SteamPlayerID sender, string args)
         {
-            HashSet<string> players = Plugin.instance.vanishPlayers;
-            if (players != null)
+            if (!string.IsNullOrEmpty(args))
             {
-                SteamPlayer player;
-                if (SteamPlayerlist.tryGetSteamPlayer(args, out player))
+                HashSet<string> players = Plugin.instance.vanishPlayers;
+                if (players != null)
                 {
-                    SteamPlayerID playerid = player.SteamPlayerID;
-                    string name = playerid.CharacterName;
-                    if (players.Contains(name))
+                    SteamPlayer player;
+                    if (SteamPlayerlist.tryGetSteamPlayer(args, out player))
                     {
-                        players.Remove(name);
-                        RocketChatManager.Say(sender.CSteamID, "已关闭" + name + "的隐身");
-                        string sendername = sender.CharacterName;
-                        if (!name.Equals(sendername))
+                        SteamPlayerID playerid = player.SteamPlayerID;
+                        string name = playerid.CharacterName;
+                        if (players.Contains(name))
                         {
-                            RocketChatManager.Say(playerid.CSteamID, "你已被" + sendername + "关闭隐身");
+                            players.Remove(name);
+                            RocketChatManager.Say(sender.CSteamID, "已关闭" + name + "的隐身");
+                            string sendername = sender.CharacterName;
+                            if (!name.Equals(sendername))
+                            {
+                                RocketChatManager.Say(playerid.CSteamID, "你已被" + sendername + "关闭隐身");
+                            }
+                            Logger.Log(name + " closed stealth");
                         }
-                        Logger.Log(name + " closed stealth");
+                        else
+                        {
+                            players.Add(name);
+                            RocketChatManager.Say(sender.CSteamID, "已开启" + name + "的隐身");
+                            string sendername = sender.CharacterName;
+                            if (!name.Equals(sendername))
+                            {
+                                RocketChatManager.Say(playerid.CSteamID, "你已被" + sendername + "开启隐身");
+                            }
+                            Logger.Log(name + "opened stealth");
+                        }
                     }
                     else
                     {
-                        players.Add(name);
-                        RocketChatManager.Say(sender.CSteamID, "已开启" + name + "的隐身");
-                        string sendername = sender.CharacterName;
-                        if (!name.Equals(sendername))
-                        {
-                            RocketChatManager.Say(playerid.CSteamID, "你已被" + sendername + "开启隐身");
-                        }
-                        Logger.Log(name + "opened stealth");
+                        RocketChatManager.Say(sender.CSteamID, "找不到玩家");
                     }
                 }
-                else
-                {
-                    RocketChatManager.Say(sender.CSteamID, "找不到玩家");
-                }
+            }
+            else
+            {
+                RocketChatManager.Say(sender.CSteamID, base.commandInfo);
             }
             base.execute(sender, args);
         }
