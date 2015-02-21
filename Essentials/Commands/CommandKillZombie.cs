@@ -22,7 +22,6 @@ namespace Commands
             Zombie[] Zombies = UnityEngine.Object.FindObjectsOfType(typeof(Zombie)) as Zombie[];
             foreach (Zombie Zombie in Zombies)
             {
-                SDG.EPlayerKill a;
                 Zombie.tellDead(Vector3.up * 10f);
             }
 
