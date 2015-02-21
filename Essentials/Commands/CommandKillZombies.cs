@@ -9,9 +9,9 @@ using UnityEngine;
 
 namespace Commands
 {
-    class CommandTime : Command
+    class KillZombies : Command
     {
-        public CommandTime()
+        public CommandKillZombies()
         {
             base.commandName = "KillZombies";
             base.commandHelp = "KillZombies";
