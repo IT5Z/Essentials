@@ -13,8 +13,8 @@ namespace Commands
     {
         public CommandTime()
         {
-            base.commandName = "KillZombie";
-            base.commandHelp = "KillZombie";
+            base.commandName = "KillZombies";
+            base.commandHelp = "KillZombies";
             base.commandInfo = "Kill all the zombies";
         }
         protected override void execute(SteamPlayerID b, string K)
