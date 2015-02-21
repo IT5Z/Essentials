@@ -6,40 +6,40 @@ using System.Threading.Tasks;
 using SDG;
 using Rocket.RocketAPI;
 
-namespace Commands
+namespace Essentials.Commands
 {
     class CommandWhois : Command
     {
         public CommandWhois()
         {
             base.commandName = "Whois";
-            base.commandHelp = "Whois [SteamID | Player]";
-            base.commandInfo = "Display Player Information";
+            base.commandHelp = "Display Player Information";
+            base.commandInfo = "Whois [SteamID | Player]";
         }
 
-        protected override void execute(SteamPlayerID b, string K)
+        protected override void execute(SteamPlayerID sender, string args)
         {
-            if(K.Length != 0)
+            if(args.Length != 0)
             {
                 SteamPlayer p;
-                if (SteamPlayerlist.tryGetSteamPlayer(K, out p))
+                if (SteamPlayerlist.tryGetSteamPlayer(args, out p))
                 {
                     SteamPlayerID pi = p.SteamPlayerID;
-                    RocketChatManager.Say(b.CSteamID, "人物名称: " + pi.CharacterName + " | Steam名称: " + pi.SteamName + " | 存档ID: " + pi.N + "-" + pi.d);
+                    RocketChatManager.Say(sender.CSteamID, "人物名称: " + pi.CharacterName + " | Steam名称: " + pi.SteamName + " | 存档ID: " + pi.N + "-" + pi.d);
                     PlayerLife life = p.Player.PlayerLife;
-                    RocketChatManager.Say(b.CSteamID, "死亡: " + life.Dead + " | 出血: " + life.Bleeding + " | 骨折: " + life.Broken + " | 冻伤: " + life.Freezing + " | 氧气: " + life.Breath + "%");
-                    RocketChatManager.Say(b.CSteamID, "生命: " + life.a + "% | 饱食: " + life.Hunger + "% | 含水: " + life.Thirst + "% | 健康: " + life.Infection + "% | 耐力: " + life.Stamina + "%");
+                    RocketChatManager.Say(sender.CSteamID, "死亡: " + life.Dead + " | 出血: " + life.Bleeding + " | 骨折: " + life.Broken + " | 冻伤: " + life.Freezing + " | 氧气: " + life.Breath + "%");
+                    RocketChatManager.Say(sender.CSteamID, "生命: " + life.a + "% | 饱食: " + life.Hunger + "% | 含水: " + life.Thirst + "% | 健康: " + life.Infection + "% | 耐力: " + life.Stamina + "%");
                 }
                 else
                 {
-                    RocketChatManager.Say(b.CSteamID, "玩家不存在");
+                    RocketChatManager.Say(sender.CSteamID, "找不到玩家");
                 }
             }
             else
             {
-                RocketChatManager.Say(b.CSteamID, base.commandHelp);
+                RocketChatManager.Say(sender.CSteamID, base.commandHelp);
             }
-            base.execute(b, K);
+            base.execute(sender, args);
         }
     }
 }

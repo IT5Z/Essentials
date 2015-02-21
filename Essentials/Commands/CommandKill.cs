@@ -7,37 +7,37 @@ using SDG;
 using Rocket.RocketAPI;
 using UnityEngine;
 
-namespace Commands
+namespace Essentials.Commands
 {
     class CommandKill : Command
     {
         public CommandKill()
         {
             base.commandName = "Kill";
-            base.commandHelp = "Kill [SteamID | Player]";
-            base.commandInfo = "Kill designated player";
+            base.commandHelp = "Kill designated player";
+            base.commandInfo = "Kill [SteamID | Player]";
         }
 
-        protected override void execute(SteamPlayerID b, string K)
+        protected override void execute(SteamPlayerID sender, string args)
         {
-            if (!string.IsNullOrEmpty(K))
+            if (!string.IsNullOrEmpty(args))
             {
                 SteamPlayer p;
-                if (SteamPlayerlist.tryGetSteamPlayer(K, out p))
+                if (SteamPlayerlist.tryGetSteamPlayer(args, out p))
                 {
-                    p.Player.PlayerLife.askDamage(100, Vector3.up * 10f, EDeathCause.KILL, ELimb.SKULL, b.CSteamID);
-                    RocketChatManager.Say(b.CSteamID, "已杀死 " + p.SteamPlayerID.CharacterName);
+                    p.Player.PlayerLife.askDamage(100, Vector3.up * 10f, EDeathCause.KILL, ELimb.SKULL, sender.CSteamID);
+                    RocketChatManager.Say(sender.CSteamID, "已杀死 " + p.SteamPlayerID.CharacterName);
                 }
                 else
                 {
-                    RocketChatManager.Say(b.CSteamID, "玩家不存在");
+                    RocketChatManager.Say(sender.CSteamID, "找不到玩家");
                 }
             }
             else
             {
-                RocketChatManager.Say(b.CSteamID, base.commandHelp);
+                RocketChatManager.Say(sender.CSteamID, base.commandHelp);
             }
-            base.execute(b, K);
+            base.execute(sender, args);
         }
     }
 }

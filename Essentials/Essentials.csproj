@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CommandKill.cs" />
+    <Compile Include="Commands\CommandVanish.cs" />
     <Compile Include="Commands\CommandWhois.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Plugin.cs" />
