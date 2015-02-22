@@ -60,16 +60,22 @@ namespace Essentials
             {
                 this.vanishPlayers = new HashSet<string>();
             }
-            if (this.vanishPlayers.Count > 0)
+            foreach (string name in this.vanishPlayers)
             {
-                foreach (string name in this.vanishPlayers)
+                if (!string.IsNullOrEmpty(name))
                 {
-                    if (name != null)
+                    SteamPlayer p;
+                    if (SteamPlayerlist.tryGetSteamPlayer(name, out p))
                     {
-                        SteamPlayer p;
-                        if (SteamPlayerlist.tryGetSteamPlayer(name, out p))
+                        SteamChannel channel = p.Player.Movement.SteamChannel;
+                        InteractableVehicle vehicle = p.Player.Movement.getVehicle();
+                        if (vehicle)
                         {
-                            p.Player.Movement.h.send("tellPosition", ESteamCall.NOT_OWNER & ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { new Vector3(0f, 0f, 0f) });
+                            channel.send("tellExitVehicle", ESteamCall.NOT_OWNER & ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { vehicle.a, 0, new Vector3(0f, 0f, 0f), 0 });
+                        }
+                        else
+                        {
+                            channel.send("tellPosition", ESteamCall.NOT_OWNER & ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { new Vector3(0f, 0f, 0f) });
                         }
                     }
                 }
