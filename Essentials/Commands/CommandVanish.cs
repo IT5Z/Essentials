@@ -50,7 +50,7 @@ namespace Essentials.Commands
                             {
                                 RocketChatManager.Say(playerid.CSteamID, "你已被" + sendername + "开启隐身");
                             }
-                            Logger.Log(name + "opened stealth");
+                            Logger.Log(name + " opened stealth");
                         }
                     }
                     else
