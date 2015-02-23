@@ -29,7 +29,7 @@ namespace Essentials.Commands
                     RocketChatManager.Say(sender.CSteamID, "人物名称: " + pi.CharacterName + " | Steam名称: " + pi.SteamName + " | 存档ID: " + info[1] + "-" + info[2]);
                     PlayerLife life = p.Player.PlayerLife;
                     RocketChatManager.Say(sender.CSteamID, "死亡: " + life.Dead + " | 出血: " + life.Bleeding + " | 骨折: " + life.Broken + " | 冻伤: " + life.Freezing + " | 氧气: " + life.Breath + "%");
-                    RocketChatManager.Say(sender.CSteamID, "生命: " + life.y + "% | 饱食: " + life.Hunger + "% | 含水: " + life.Thirst + "% | 健康: " + life.Infection + "% | 耐力: " + life.Stamina + "%");
+                    RocketChatManager.Say(sender.CSteamID, "生命: " + life.g + "% | 饱食: " + life.Hunger + "% | 含水: " + life.Thirst + "% | 健康: " + life.Infection + "% | 耐力: " + life.Stamina + "%");
                 }
                 else
                 {

@@ -9,7 +9,6 @@ using Rocket.RocketAPI.Events;
 using SDG;
 using Essentials.Commands;
 using UnityEngine;
-using System.Reflection;
 
 namespace Essentials
 {
@@ -68,26 +67,7 @@ namespace Essentials
                     SteamPlayer p;
                     if (SteamPlayerlist.tryGetSteamPlayer(name, out p))
                     {
-                        PlayerMovement move = p.Player.Movement;
-                        InteractableVehicle vehicle = move.getVehicle();
-                        if (vehicle)
-                        {
-                            byte b = 0;
-                            while(b < vehicle.G.Length)
-                            {
-                                if (vehicle.G[b] != null && vehicle.G[b].g != null && p.Equals(vehicle.G[b].g))
-                                {
-                                    VehicleManager vm = (VehicleManager)typeof(VehicleManager).GetField("b", BindingFlags.NonPublic | BindingFlags.Static).GetValue(new VehicleManager());
-                                    vm.SteamChannel.send("tellExitVehicle", ESteamCall.NOT_OWNER & ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { vehicle.Y, b, new Vector3(0, 0, 0), 0 });
-                                    break;
-                                }
-                                b += 1;
-                            }
-                        }
-                        else
-                        {
-                            move.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER & ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { new Vector3(0f, 0f, 0f) });
-                        }
+                        p.Player.Movement.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER & ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { new Vector3(0f, 0f, 0f) });
                     }
                 }
             }
