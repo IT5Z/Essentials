@@ -10,12 +10,22 @@ namespace Essentials
     public class Configuration : RocketConfiguration
     {
         public AutoSave ConfigAutoSave;
+        public AutoResetItems ConfigAutoResetItems;
 
         public class AutoSave
         {
             public bool Enabled;
             public int Interval;
             public string Message;
+        }
+
+        public class AutoResetItems
+        {
+            public bool Enabled;
+            public int Interval;
+            public string Message;
+            public int WarningTime;
+            public string WarningMessage;
         }
 
         public RocketConfiguration DefaultConfiguration
@@ -29,6 +39,14 @@ namespace Essentials
                         Enabled = true,
                         Interval = 600,
                         Message = "服务器自动保存完成"
+                    },
+                    ConfigAutoResetItems = new AutoResetItems
+                    {
+                        Enabled = true,
+                        Interval = 3600,
+                        Message = "服务器已刷新地面物品",
+                        WarningTime = 180,
+                        WarningMessage = "服务器将在3分钟内刷新地面物品，请拾好重要物品。"
                     }
                 };
             }

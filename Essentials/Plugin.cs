@@ -22,7 +22,9 @@ namespace Essentials
                 return plugin;
             }
         }
-        public DateTime? autosavetime;
+        private DateTime? autosaveTime;
+        private DateTime? autoresetitemsTime;
+        private bool resetitemswarningSend;
         public HashSet<string> vanishPlayers;
 
         protected override void Load()
@@ -42,14 +44,38 @@ namespace Essentials
         {
             if(RocketPlugin<Configuration>.Configuration.ConfigAutoSave != null && RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Enabled)
             {
-                if(!this.autosavetime.HasValue)
+                if(!this.autosaveTime.HasValue)
                 {
-                    this.autosavetime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Interval);
+                    this.autosaveTime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Interval);
                 }
-                if(DateTime.Now >= autosavetime) {
+                if(DateTime.Now >= autosaveTime)
+                {
                     SaveManager.save();
                     RocketChatManager.Say(RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Message);
-                    this.autosavetime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Interval);
+                    this.autosaveTime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Interval);
+                }
+            }
+        }
+
+        public void autoResetItems()
+        {
+            if(RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems != null && RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems.Enabled)
+            {
+                if(!this.autoresetitemsTime.HasValue)
+                {
+                    this.autoresetitemsTime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems.Interval);
+                }
+                if(DateTime.Now >= autoresetitemsTime)
+                {
+                    Util.ResetItems();
+                    RocketChatManager.Say(RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems.Message);
+                    this.autoresetitemsTime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems.Interval);
+                    this.resetitemswarningSend = false;
+                }
+                if(!this.resetitemswarningSend && (autoresetitemsTime.Value - DateTime.Now).TotalSeconds <= RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems.WarningTime)
+                {
+                    RocketChatManager.Say(RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems.WarningMessage);
+                    this.resetitemswarningSend = true;
                 }
             }
         }
@@ -78,6 +104,7 @@ namespace Essentials
             if (RocketPlugin.Loaded)
             {
                 autoSave();
+                autoResetItems();
                 vanish();
             }
         }

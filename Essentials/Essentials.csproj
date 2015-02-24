@@ -55,11 +55,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CommandKill.cs" />
+    <Compile Include="Commands\CommandResetItems.cs" />
     <Compile Include="Commands\CommandVanish.cs" />
     <Compile Include="Commands\CommandWhois.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
