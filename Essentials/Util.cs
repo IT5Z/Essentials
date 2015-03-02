@@ -12,22 +12,22 @@ namespace Essentials
     {
         public static void ResetItems()
         {
-            ItemManager manager = typeof(ItemManager).GetField("g", BindingFlags.NonPublic | BindingFlags.Static).GetValue(new ItemManager()) as ItemManager;
-            FieldInfo info = typeof(ItemManager).GetField("K", BindingFlags.NonPublic | BindingFlags.Static);
-            ItemRegion[,] temp = info.GetValue(manager) as ItemRegion[,];
-            typeof(ItemManager).GetMethod("J", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(manager, new object[] { Level.e + 1 });
-            ItemRegion[,] region = info.GetValue(manager) as ItemRegion[,];
-            for (byte b = 0; b < Regions.J; b++)
+            ItemManager manager = typeof(ItemManager).GetField("e", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as ItemManager;
+            FieldInfo info = typeof(ItemManager).GetField("V", BindingFlags.NonPublic | BindingFlags.Static);
+            ItemRegion[,] temp = info.GetValue(null) as ItemRegion[,];
+            typeof(ItemManager).GetMethod("V", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(manager, new object[] { Level.e + 1 });
+            ItemRegion[,] region = info.GetValue(null) as ItemRegion[,];
+            for (byte b = 0; b < Regions.e; b ++)
             {
-                for (byte b2 = 0; b2 < Regions.J; b2++)
+                for (byte b2 = 0; b2 < Regions.e; b2 ++)
                 {
-                    foreach (ItemData data in temp[b, b2].I)
+                    foreach (ItemData data in temp[b, b2].Q)
                     {
-                        manager.SteamChannel.send("tellTakeItem", ESteamCall.CLIENTS, b, b2, ItemManager.c, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, data.L });
+                        manager.SteamChannel.send("tellTakeItem", ESteamCall.CLIENTS, b, b2, ItemManager.X, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, data.m });
                     }
-                    foreach (ItemData data in region[b, b2].I)
+                    foreach (ItemData data in region[b, b2].Q)
                     {
-                        manager.SteamChannel.send("tellItem", ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, data.k.ItemID, data.k.Metadata, data.L });
+                        manager.SteamChannel.send("tellItem", ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, data.s.ItemID, data.s.Metadata, data.m });
                     }
                 }
             }
