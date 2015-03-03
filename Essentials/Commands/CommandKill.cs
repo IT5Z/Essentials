@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SDG;
 using Rocket.RocketAPI;
 using UnityEngine;
+using Essentials.Extensions;
 
 namespace Essentials.Commands
 {
@@ -26,11 +27,11 @@ namespace Essentials.Commands
                 if (SteamPlayerlist.tryGetSteamPlayer(args, out p))
                 {
                     p.Player.PlayerLife.askDamage(100, Vector3.up * 10f, EDeathCause.KILL, ELimb.SKULL, sender.CSteamID);
-                    RocketChatManager.Say(sender.CSteamID, "已杀死 " + p.SteamPlayerID.CharacterName);
+                    RocketChatManager.Say(sender.CSteamID, "commands.kill.message".I18N(p.SteamPlayerID.CharacterName));
                 }
                 else
                 {
-                    RocketChatManager.Say(sender.CSteamID, "找不到玩家");
+                    RocketChatManager.Say(sender.CSteamID, "commands.generic.player.notFound".I18N());
                 }
             }
             else

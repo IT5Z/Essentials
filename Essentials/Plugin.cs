@@ -8,11 +8,13 @@ using Rocket.RocketAPI;
 using Rocket.RocketAPI.Events;
 using SDG;
 using Essentials.Commands;
+using Essentials.ConfigManager;
+using Essentials.Extensions;
 using UnityEngine;
 
 namespace Essentials
 {
-    internal class Plugin : RocketPlugin<Configuration>
+    internal class Plugin : RocketPlugin
     {
         private static Plugin plugin;
         public static Plugin instance
@@ -20,6 +22,22 @@ namespace Essentials
             get
             {
                 return plugin;
+            }
+        }
+        private MainConfig mainconfig;
+        public MainConfig MainConfig
+        {
+            get
+            {
+                return this.mainconfig;
+            }
+        }
+        private I18N i18n;
+        public I18N I18N
+        {
+            get
+            {
+                return this.i18n;
             }
         }
         private DateTime? autosaveTime;
@@ -30,6 +48,8 @@ namespace Essentials
         protected override void Load()
         {
             plugin = this;
+            mainconfig = new MainConfig();
+            i18n = new I18N();
             RocketServerEvents.OnPlayerDisconnected += playerLeave;
             Logger.Log("Essentials by Android is load");
             base.Load();
@@ -42,39 +62,39 @@ namespace Essentials
 
         public void autoSave()
         {
-            if(RocketPlugin<Configuration>.Configuration.ConfigAutoSave != null && RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Enabled)
+            if(this.MainConfig.AutoSaveEnabled)
             {
                 if(!this.autosaveTime.HasValue)
                 {
-                    this.autosaveTime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Interval);
+                    this.autosaveTime = DateTime.Now.AddSeconds(this.MainConfig.AutoSaveInterval);
                 }
                 if(DateTime.Now >= autosaveTime)
                 {
                     SaveManager.save();
-                    RocketChatManager.Say(RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Message);
-                    this.autosaveTime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.ConfigAutoSave.Interval);
+                    RocketChatManager.Say("autosave.message".I18N());
+                    this.autosaveTime = DateTime.Now.AddSeconds(this.MainConfig.AutoSaveInterval);
                 }
             }
         }
 
         public void autoResetItems()
         {
-            if(RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems != null && RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems.Enabled)
+            if (this.MainConfig.AutoResetItemsEnabled)
             {
                 if(!this.autoresetitemsTime.HasValue)
                 {
-                    this.autoresetitemsTime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems.Interval);
+                    this.autoresetitemsTime = DateTime.Now.AddSeconds(this.MainConfig.AutoResetItemsInterval);
                 }
                 if(DateTime.Now >= autoresetitemsTime)
                 {
                     Util.ResetItems();
-                    RocketChatManager.Say(RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems.Message);
-                    this.autoresetitemsTime = DateTime.Now.AddSeconds(RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems.Interval);
+                    RocketChatManager.Say("autoresetitems.message".I18N());
+                    this.autoresetitemsTime = DateTime.Now.AddSeconds(this.MainConfig.AutoResetItemsInterval);
                     this.resetitemswarningSend = false;
                 }
-                if(!this.resetitemswarningSend && (autoresetitemsTime.Value - DateTime.Now).TotalSeconds <= RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems.WarningTime)
+                if (!this.resetitemswarningSend && (autoresetitemsTime.Value - DateTime.Now).TotalSeconds <= this.MainConfig.AutoResetItemsWarningTime)
                 {
-                    RocketChatManager.Say(RocketPlugin<Configuration>.Configuration.ConfigAutoResetItems.WarningMessage);
+                    RocketChatManager.Say("autoresetitems.warningmessage".I18N(this.MainConfig.AutoResetItemsWarningTime));
                     this.resetitemswarningSend = true;
                 }
             }

@@ -54,11 +54,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CommandEssReload.cs" />
     <Compile Include="Commands\CommandKill.cs" />
     <Compile Include="Commands\CommandResetItems.cs" />
     <Compile Include="Commands\CommandVanish.cs" />
     <Compile Include="Commands\CommandWhois.cs" />
-    <Compile Include="Configuration.cs" />
+    <Compile Include="ConfigManager\Config.cs" />
+    <Compile Include="ConfigManager\MainConfig.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="I18N.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SDG;
 using Rocket.RocketAPI;
 using Rocket.Logging;
+using Essentials.Extensions;
 
 namespace Essentials.Commands
 {
@@ -33,29 +34,29 @@ namespace Essentials.Commands
                         if (players.Contains(name))
                         {
                             players.Remove(name);
-                            RocketChatManager.Say(sender.CSteamID, "已关闭" + name + "的隐身");
+                            RocketChatManager.Say(sender.CSteamID, "commands.vanish.sender.off".I18N(name));
                             string sendername = sender.CharacterName;
                             if (!name.Equals(sendername))
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "你已被" + sendername + "关闭隐身");
+                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.off".I18N(sendername));
                             }
                             Logger.Log(name + " closed stealth");
                         }
                         else
                         {
                             players.Add(name);
-                            RocketChatManager.Say(sender.CSteamID, "已开启" + name + "的隐身");
+                            RocketChatManager.Say(sender.CSteamID, "commands.vanish.sender.on".I18N(name));
                             string sendername = sender.CharacterName;
                             if (!name.Equals(sendername))
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "你已被" + sendername + "开启隐身");
+                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.on".I18N(sendername));
                             }
                             Logger.Log(name + " opened stealth");
                         }
                     }
                     else
                     {
-                        RocketChatManager.Say(sender.CSteamID, "找不到玩家");
+                        RocketChatManager.Say(sender.CSteamID, "commands.generic.player.notFound".I18N());
                     }
                 }
             }

@@ -5,11 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using SDG;
 using System.Reflection;
+using Rocket;
 
 namespace Essentials
 {
     class Util
     {
+        public static string getPluginFilePath(string filename)
+        {
+            return string.Format("{0}Plugins/{1}/{2}", RocketSettings.HomeFolder, typeof(Plugin).Assembly.GetName().Name, filename);
+        }
+
         public static void ResetItems()
         {
             ItemManager manager = typeof(ItemManager).GetField("e", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as ItemManager;

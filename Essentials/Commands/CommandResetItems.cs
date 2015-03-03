@@ -7,6 +7,7 @@ using SDG;
 using System.Reflection;
 using Rocket.RocketAPI;
 using Rocket.Logging;
+using Essentials.Extensions;
 
 namespace Essentials.Commands
 {
@@ -22,7 +23,7 @@ namespace Essentials.Commands
         protected override void execute(SteamPlayerID sender, string args)
         {
             Util.ResetItems();
-            RocketChatManager.Say(sender.CSteamID, "已刷新地面物品");
+            RocketChatManager.Say(sender.CSteamID, "commands.resetitems.message".I18N());
             Logger.Log(sender.CharacterName + " reset ground items");
             base.execute(sender, args);
         }

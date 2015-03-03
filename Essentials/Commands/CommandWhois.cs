@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SDG;
 using Rocket.RocketAPI;
+using Essentials.Extensions;
 
 namespace Essentials.Commands
 {
@@ -26,14 +27,15 @@ namespace Essentials.Commands
                 {
                     SteamPlayerID pi = p.SteamPlayerID;
                     string[] info = Parser.getComponentsFromSerial(pi.ToString(), ' ');
-                    RocketChatManager.Say(sender.CSteamID, "人物名称: " + pi.CharacterName + " | Steam名称: " + pi.SteamName + " | 存档ID: " + info[1] + "-" + info[2]);
                     PlayerLife life = p.Player.PlayerLife;
-                    RocketChatManager.Say(sender.CSteamID, "死亡: " + life.Dead + " | 出血: " + life.Bleeding + " | 骨折: " + life.Broken + " | 冻伤: " + life.Freezing + " | 氧气: " + life.Breath + "%");
-                    RocketChatManager.Say(sender.CSteamID, "生命: " + life.d + "% | 饱食: " + life.Hunger + "% | 含水: " + life.Thirst + "% | 健康: " + life.Infection + "% | 耐力: " + life.Stamina + "%");
+                    I18N i18n = Plugin.instance.I18N;
+                    RocketChatManager.Say(sender.CSteamID, "commands.whois.info".I18N(pi.CharacterName, pi.SteamName, info[1] + "-" + info[2]));
+                    RocketChatManager.Say(sender.CSteamID, "commands.whois.buff".I18N(life.Dead, life.Bleeding, life.Broken, life.Freezing, life.Breath));
+                    RocketChatManager.Say(sender.CSteamID, "commands.whois.state".I18N(life.d, life.Hunger, life.Thirst, life.Infection, life.Stamina));
                 }
                 else
                 {
-                    RocketChatManager.Say(sender.CSteamID, "找不到玩家");
+                    RocketChatManager.Say(sender.CSteamID, "commands.generic.player.notFound".I18N());
                 }
             }
             else
