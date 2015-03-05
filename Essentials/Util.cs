@@ -18,22 +18,22 @@ namespace Essentials
 
         public static void ResetItems()
         {
-            ItemManager manager = typeof(ItemManager).GetField("e", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as ItemManager;
-            FieldInfo info = typeof(ItemManager).GetField("V", BindingFlags.NonPublic | BindingFlags.Static);
+            ItemManager manager = typeof(ItemManager).GetField("U", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as ItemManager;
+            FieldInfo info = typeof(ItemManager).GetField("T", BindingFlags.NonPublic | BindingFlags.Static);
             ItemRegion[,] temp = info.GetValue(null) as ItemRegion[,];
-            typeof(ItemManager).GetMethod("V", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(manager, new object[] { Level.e + 1 });
+            typeof(ItemManager).GetMethod("U", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(manager, new object[] { int.MaxValue });
             ItemRegion[,] region = info.GetValue(null) as ItemRegion[,];
-            for (byte b = 0; b < Regions.e; b ++)
+            for (byte b = 0; b < 64; b ++)
             {
-                for (byte b2 = 0; b2 < Regions.e; b2 ++)
+                for (byte b2 = 0; b2 < 64; b2 ++)
                 {
-                    foreach (ItemData data in temp[b, b2].Q)
+                    foreach (ItemData data in temp[b, b2].V)
                     {
-                        manager.SteamChannel.send("tellTakeItem", ESteamCall.CLIENTS, b, b2, ItemManager.X, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, data.m });
+                        manager.SteamChannel.send("tellTakeItem", ESteamCall.CLIENTS, b, b2, 1, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, data.A });
                     }
-                    foreach (ItemData data in region[b, b2].Q)
+                    foreach (ItemData data in region[b, b2].V)
                     {
-                        manager.SteamChannel.send("tellItem", ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, data.s.ItemID, data.s.Metadata, data.m });
+                        manager.SteamChannel.send("tellItem", ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, data.C.ItemID, data.C.Metadata, data.A });
                     }
                 }
             }

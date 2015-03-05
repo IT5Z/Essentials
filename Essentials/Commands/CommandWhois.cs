@@ -31,7 +31,7 @@ namespace Essentials.Commands
                     I18N i18n = Plugin.instance.I18N;
                     RocketChatManager.Say(sender.CSteamID, "commands.whois.info".I18N(pi.CharacterName, pi.SteamName, info[1] + "-" + info[2]));
                     RocketChatManager.Say(sender.CSteamID, "commands.whois.buff".I18N(life.Dead, life.Bleeding, life.Broken, life.Freezing, life.Breath));
-                    RocketChatManager.Say(sender.CSteamID, "commands.whois.state".I18N(life.d, life.Hunger, life.Thirst, life.Infection, life.Stamina));
+                    RocketChatManager.Say(sender.CSteamID, "commands.whois.state".I18N(life.K, life.Hunger, life.Thirst, life.Infection, life.Stamina));
                 }
                 else
                 {
