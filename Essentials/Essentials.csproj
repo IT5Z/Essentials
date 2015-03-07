@@ -61,6 +61,10 @@
     <Compile Include="Commands\CommandWhois.cs" />
     <Compile Include="ConfigManager\Config.cs" />
     <Compile Include="ConfigManager\MainConfig.cs" />
+    <Compile Include="Extensions\ItemDataExtensions.cs" />
+    <Compile Include="Extensions\ItemManagerExtensions.cs" />
+    <Compile Include="Extensions\ItemRegionExtensions.cs" />
+    <Compile Include="Extensions\PlayerLifeExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="I18N.cs" />
     <Compile Include="Plugin.cs" />
