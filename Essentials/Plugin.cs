@@ -44,18 +44,18 @@ namespace Essentials
         private DateTime? autosaveTime;
         private DateTime? autoresetitemsTime;
         private bool resetitemswarningSend;
-        public Dictionary<string, ProtectInfo> protectPlayers;
-        public Dictionary<string, Vector3> frozenPlayers;
-        public HashSet<string> vanishedPlayers;
+        public Dictionary<ulong, ProtectInfo> protectPlayers;
+        public Dictionary<ulong, Vector3> frozenPlayers;
+        public HashSet<ulong> vanishedPlayers;
 
         protected override void Load()
         {
             plugin = this;
             mainconfig = new MainConfig();
             i18n = new I18N();
-            this.protectPlayers = new Dictionary<string, ProtectInfo>();
-            this.frozenPlayers = new Dictionary<string, Vector3>();
-            this.vanishedPlayers = new HashSet<string>();
+            this.protectPlayers = new Dictionary<ulong, ProtectInfo>();
+            this.frozenPlayers = new Dictionary<ulong, Vector3>();
+            this.vanishedPlayers = new HashSet<ulong>();
             RocketServerEvents.OnPlayerConnected += this.playerJoin;
             RocketServerEvents.OnPlayerDisconnected += this.playerLeave;
             Logger.Log("Essentials by Android is load");
@@ -67,20 +67,20 @@ namespace Essentials
             if (mainconfig.PlayerProtectEnabled)
             {
                 RocketChatManager.Say(player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID, "playerprotect.message".I18N(mainconfig.PlayerProtectTime));
-                this.protectPlayers.Add(player.SteamChannel.SteamPlayer.SteamPlayerID.CharacterName, new ProtectInfo(player.transform.position, MeasurementTool.angleToByte(player.transform.rotation.eulerAngles.y), DateTime.Now.AddSeconds(mainconfig.PlayerProtectTime)));
+                this.protectPlayers.Add(player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID.m_SteamID, new ProtectInfo(player.transform.position, MeasurementTool.angleToByte(player.transform.rotation.eulerAngles.y), DateTime.Now.AddSeconds(mainconfig.PlayerProtectTime)));
             }
         }
 
         public void playerLeave(Player player)
         {
-            string name = player.SteamChannel.SteamPlayer.SteamPlayerID.CharacterName;
-            frozenPlayers.Remove(name);
-            vanishedPlayers.Remove(name);
-            if (protectPlayers.ContainsKey(name))
+            ulong steamid = player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID.m_SteamID;
+            frozenPlayers.Remove(steamid);
+            vanishedPlayers.Remove(steamid);
+            if (protectPlayers.ContainsKey(steamid))
             {
-                player.sendTeleport(protectPlayers[name].position, protectPlayers[name].angle);
+                player.sendTeleport(protectPlayers[steamid].position, protectPlayers[steamid].angle);
                 player.save();
-                protectPlayers.Remove(name);
+                protectPlayers.Remove(steamid);
             }
         }
 
@@ -128,18 +128,18 @@ namespace Essentials
         {
             if (protectPlayers == null)
             {
-                this.protectPlayers = new Dictionary<string, ProtectInfo>();
+                this.protectPlayers = new Dictionary<ulong, ProtectInfo>();
             }
             if (mainconfig.PlayerProtectEnabled)
             {
-                string[] keys = this.protectPlayers.Keys.ToArray();
-                foreach (string name in keys)
+                ulong[] keys = this.protectPlayers.Keys.ToArray();
+                foreach (ulong steamid in keys)
                 {
-                    ProtectInfo info = this.protectPlayers[name];
-                    if (!string.IsNullOrEmpty(name) && info != null)
+                    ProtectInfo info = this.protectPlayers[steamid];
+                    if (steamid != 0 && info != null)
                     {
                         SteamPlayer steamplayer;
-                        if (SteamPlayerlist.tryGetSteamPlayer(name, out steamplayer))
+                        if (SteamPlayerlist.tryGetSteamPlayer(steamid.ToString(), out steamplayer))
                         {
                             try
                             {
@@ -150,7 +150,7 @@ namespace Essentials
                                 else
                                 {
                                     steamplayer.Player.sendTeleport(info.position, info.angle);
-                                    this.protectPlayers.Remove(name);
+                                    this.protectPlayers.Remove(steamid);
                                 }
                             }
                             catch
@@ -167,14 +167,14 @@ namespace Essentials
         {
             if (frozenPlayers == null)
             {
-                this.frozenPlayers = new Dictionary<string, Vector3>();
+                this.frozenPlayers = new Dictionary<ulong, Vector3>();
             }
-            foreach (KeyValuePair<string, Vector3> item in this.frozenPlayers)
+            foreach (KeyValuePair<ulong, Vector3> item in this.frozenPlayers)
             {
-                if (!string.IsNullOrEmpty(item.Key) && item.Value != null)
+                if (item.Key != 0 && item.Value != null)
                 {
                     SteamPlayer p;
-                    if (SteamPlayerlist.tryGetSteamPlayer(item.Key, out p))
+                    if (SteamPlayerlist.tryGetSteamPlayer(item.Key.ToString(), out p))
                     {
                         p.Player.Movement.SteamChannel.send("tellPosition", ESteamCall.OWNER, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { item.Value });
                     }
@@ -186,14 +186,14 @@ namespace Essentials
         {
             if (this.vanishedPlayers == null)
             {
-                this.vanishedPlayers = new HashSet<string>();
+                this.vanishedPlayers = new HashSet<ulong>();
             }
-            foreach (string name in this.vanishedPlayers)
+            foreach (ulong steamid in this.vanishedPlayers)
             {
-                if (!string.IsNullOrEmpty(name))
+                if (steamid != 0)
                 {
                     SteamPlayer p;
-                    if (SteamPlayerlist.tryGetSteamPlayer(name, out p))
+                    if (SteamPlayerlist.tryGetSteamPlayer(steamid.ToString(), out p))
                     {
                         p.Player.Movement.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER & ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { Vector3.zero });
                     }

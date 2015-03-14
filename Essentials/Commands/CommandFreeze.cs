@@ -24,33 +24,32 @@ namespace Essentials.Commands
         {
             if (!string.IsNullOrEmpty(args))
             {
-                Dictionary<string, Vector3> players = Plugin.instance.frozenPlayers;
+                Dictionary<ulong, Vector3> players = Plugin.instance.frozenPlayers;
                 if (players != null)
                 {
                     SteamPlayer steamplayer;
                     if (SteamPlayerlist.tryGetSteamPlayer(args, out steamplayer))
                     {
                         SteamPlayerID playerid = steamplayer.SteamPlayerID;
+                        ulong steamid = playerid.CSteamID.m_SteamID;
                         string name = playerid.CharacterName;
-                        if (players.ContainsKey(name))
+                        if (players.ContainsKey(steamid))
                         {
-                            players.Remove(name);
+                            players.Remove(steamid);
                             RocketChatManager.Say(sender.CSteamID, "commands.freeze.sender.off".I18N(name));
-                            string sendername = sender.CharacterName;
-                            if (!name.Equals(sendername))
+                            if (steamid != sender.CSteamID.m_SteamID)
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "commands.freeze.target.off".I18N(sendername));
+                                RocketChatManager.Say(playerid.CSteamID, "commands.freeze.target.off".I18N(sender.CharacterName));
                             }
                             Logger.Log("Freeze " + name);
                         }
                         else
                         {
-                            players.Add(name, steamplayer.Player.transform.position);
+                            players.Add(steamid, steamplayer.Player.transform.position);
                             RocketChatManager.Say(sender.CSteamID, "commands.freeze.sender.on".I18N(name));
-                            string sendername = sender.CharacterName;
-                            if (!name.Equals(sendername))
+                            if (steamid != sender.CSteamID.m_SteamID)
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "commands.freeze.target.on".I18N(sendername));
+                                RocketChatManager.Say(playerid.CSteamID, "commands.freeze.target.on".I18N(sender.CharacterName));
                             }
                             Logger.Log("Unfreeze " + name);
                         }
