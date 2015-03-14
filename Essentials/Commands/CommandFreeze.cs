@@ -4,26 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SDG;
+using UnityEngine;
 using Rocket.RocketAPI;
 using Rocket.Logging;
 using Essentials.Extensions;
 
 namespace Essentials.Commands
 {
-    class CommandVanish : Command
+    class CommandFreeze : Command
     {
-        public CommandVanish()
+        public CommandFreeze()
         {
-            base.commandName = "Vanish";
-            base.commandHelp = "Toggles invisibility";
-            base.commandInfo = "Vanish [SteamID | Player]";
+            base.commandName = "Freeze";
+            base.commandHelp = "Toggles freeze";
+            base.commandInfo = "Freeze [SteamID | Player]";
         }
 
         protected override void execute(SteamPlayerID sender, string args)
         {
             if (!string.IsNullOrEmpty(args))
             {
-                HashSet<string> players = Plugin.instance.vanishedPlayers;
+                Dictionary<string, Vector3> players = Plugin.instance.frozenPlayers;
                 if (players != null)
                 {
                     SteamPlayer steamplayer;
@@ -31,27 +32,27 @@ namespace Essentials.Commands
                     {
                         SteamPlayerID playerid = steamplayer.SteamPlayerID;
                         string name = playerid.CharacterName;
-                        if (players.Contains(name))
+                        if (players.ContainsKey(name))
                         {
                             players.Remove(name);
-                            RocketChatManager.Say(sender.CSteamID, "commands.vanish.sender.off".I18N(name));
+                            RocketChatManager.Say(sender.CSteamID, "commands.freeze.sender.off".I18N(name));
                             string sendername = sender.CharacterName;
                             if (!name.Equals(sendername))
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.off".I18N(sendername));
+                                RocketChatManager.Say(playerid.CSteamID, "commands.freeze.target.off".I18N(sendername));
                             }
-                            Logger.Log(name + " closed stealth");
+                            Logger.Log("Freeze " + name);
                         }
                         else
                         {
-                            players.Add(name);
-                            RocketChatManager.Say(sender.CSteamID, "commands.vanish.sender.on".I18N(name));
+                            players.Add(name, steamplayer.Player.transform.position);
+                            RocketChatManager.Say(sender.CSteamID, "commands.freeze.sender.on".I18N(name));
                             string sendername = sender.CharacterName;
                             if (!name.Equals(sendername))
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.on".I18N(sendername));
+                                RocketChatManager.Say(playerid.CSteamID, "commands.freeze.target.on".I18N(sendername));
                             }
-                            Logger.Log(name + " opened stealth");
+                            Logger.Log("Unfreeze " + name);
                         }
                     }
                     else

@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CommandEssReload.cs" />
+    <Compile Include="Commands\CommandFreeze.cs" />
     <Compile Include="Commands\CommandKill.cs" />
     <Compile Include="Commands\CommandResetItems.cs" />
     <Compile Include="Commands\CommandVanish.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Extensions\PlayerLifeExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="I18N.cs" />
+    <Compile Include="Model\ProtectInfo.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />

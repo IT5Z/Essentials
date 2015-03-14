@@ -10,6 +10,7 @@ using SDG;
 using Essentials.Commands;
 using Essentials.ConfigManager;
 using Essentials.Extensions;
+using Essentials.Model;
 using UnityEngine;
 
 namespace Essentials
@@ -43,21 +44,44 @@ namespace Essentials
         private DateTime? autosaveTime;
         private DateTime? autoresetitemsTime;
         private bool resetitemswarningSend;
-        public HashSet<string> vanishPlayers;
+        public Dictionary<string, ProtectInfo> protectPlayers;
+        public Dictionary<string, Vector3> frozenPlayers;
+        public HashSet<string> vanishedPlayers;
 
         protected override void Load()
         {
             plugin = this;
             mainconfig = new MainConfig();
             i18n = new I18N();
-            RocketServerEvents.OnPlayerDisconnected += playerLeave;
+            this.protectPlayers = new Dictionary<string, ProtectInfo>();
+            this.frozenPlayers = new Dictionary<string, Vector3>();
+            this.vanishedPlayers = new HashSet<string>();
+            RocketServerEvents.OnPlayerConnected += this.playerJoin;
+            RocketServerEvents.OnPlayerDisconnected += this.playerLeave;
             Logger.Log("Essentials by Android is load");
             base.Load();
         }
 
+        public void playerJoin(Player player)
+        {
+            if (mainconfig.PlayerProtectEnabled)
+            {
+                RocketChatManager.Say(player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID, "playerprotect.message".I18N(mainconfig.PlayerProtectTime));
+                this.protectPlayers.Add(player.SteamChannel.SteamPlayer.SteamPlayerID.CharacterName, new ProtectInfo(player.transform.position, MeasurementTool.angleToByte(player.transform.rotation.eulerAngles.y), DateTime.Now.AddSeconds(mainconfig.PlayerProtectTime)));
+            }
+        }
+
         public void playerLeave(Player player)
         {
-            vanishPlayers.Remove(player.SteamChannel.SteamPlayer.SteamPlayerID.CharacterName);
+            string name = player.SteamChannel.SteamPlayer.SteamPlayerID.CharacterName;
+            frozenPlayers.Remove(name);
+            vanishedPlayers.Remove(name);
+            if (protectPlayers.ContainsKey(name))
+            {
+                player.sendTeleport(protectPlayers[name].position, protectPlayers[name].angle);
+                player.save();
+                protectPlayers.Remove(name);
+            }
         }
 
         public void autoSave()
@@ -100,20 +124,78 @@ namespace Essentials
             }
         }
 
+        public void protect()
+        {
+            if (protectPlayers == null)
+            {
+                this.protectPlayers = new Dictionary<string, ProtectInfo>();
+            }
+            if (mainconfig.PlayerProtectEnabled)
+            {
+                string[] keys = this.protectPlayers.Keys.ToArray();
+                foreach (string name in keys)
+                {
+                    ProtectInfo info = this.protectPlayers[name];
+                    if (!string.IsNullOrEmpty(name) && info != null)
+                    {
+                        SteamPlayer steamplayer;
+                        if (SteamPlayerlist.tryGetSteamPlayer(name, out steamplayer))
+                        {
+                            try
+                            {
+                                if (DateTime.Now < info.time)
+                                {
+                                    steamplayer.Player.sendTeleport(new Vector3(0, 24, 0), 0);
+                                }
+                                else
+                                {
+                                    steamplayer.Player.sendTeleport(info.position, info.angle);
+                                    this.protectPlayers.Remove(name);
+                                }
+                            }
+                            catch
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void freeze()
+        {
+            if (frozenPlayers == null)
+            {
+                this.frozenPlayers = new Dictionary<string, Vector3>();
+            }
+            foreach (KeyValuePair<string, Vector3> item in this.frozenPlayers)
+            {
+                if (!string.IsNullOrEmpty(item.Key) && item.Value != null)
+                {
+                    SteamPlayer p;
+                    if (SteamPlayerlist.tryGetSteamPlayer(item.Key, out p))
+                    {
+                        p.Player.Movement.SteamChannel.send("tellPosition", ESteamCall.OWNER, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { item.Value });
+                    }
+                }
+            }
+        }
+
         public void vanish()
         {
-            if (this.vanishPlayers == null)
+            if (this.vanishedPlayers == null)
             {
-                this.vanishPlayers = new HashSet<string>();
+                this.vanishedPlayers = new HashSet<string>();
             }
-            foreach (string name in this.vanishPlayers)
+            foreach (string name in this.vanishedPlayers)
             {
                 if (!string.IsNullOrEmpty(name))
                 {
                     SteamPlayer p;
                     if (SteamPlayerlist.tryGetSteamPlayer(name, out p))
                     {
-                        p.Player.Movement.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER & ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { new Vector3(0f, 0f, 0f) });
+                        p.Player.Movement.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER & ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { Vector3.zero });
                     }
                 }
             }
@@ -123,9 +205,11 @@ namespace Essentials
         {
             if (RocketPlugin.Loaded)
             {
-                autoSave();
-                autoResetItems();
-                vanish();
+                this.autoSave();
+                this.autoResetItems();
+                this.protect();
+                this.freeze();
+                this.vanish();
             }
         }
     }

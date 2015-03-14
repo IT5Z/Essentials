@@ -44,10 +44,7 @@ namespace Essentials.ConfigManager
         public void Save()
         {
             string dirpath = Path.GetDirectoryName(filename);
-            if (!Directory.Exists(dirpath))
-            {
-                Directory.CreateDirectory(dirpath);
-            }
+            if (!Directory.Exists(dirpath)) Directory.CreateDirectory(dirpath);
             document.Save(filename);
         }
 

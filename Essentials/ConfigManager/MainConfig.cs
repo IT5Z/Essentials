@@ -89,6 +89,32 @@ namespace Essentials.ConfigManager
             }
         }
 
+        public bool PlayerProtectEnabled
+        {
+            get
+            {
+                return config.getBoolean(new string[] { "Essentials", "PlayerProtect", "Enabled" });
+            }
+
+            set
+            {
+                config.set(new string[] { "Essentials", "PlayerProtect", "Enabled" }, value);
+            }
+        }
+
+        public int PlayerProtectTime
+        {
+            get
+            {
+                return config.getInt(new string[] { "Essentials", "PlayerProtect", "Time" });
+            }
+
+            set
+            {
+                config.set(new string[] { "Essentials", "PlayerProtect", "Time" }, value);
+            }
+        }
+
         public MainConfig()
         {
             this.Init();
@@ -103,6 +129,8 @@ namespace Essentials.ConfigManager
             config.setDefault(new string[] { "Essentials", "AutoResetItems", "Enabled" }, true, config.isBoolean);
             config.setDefault(new string[] { "Essentials", "AutoResetItems", "Interval" }, 3600, config.isInt);
             config.setDefault(new string[] { "Essentials", "AutoResetItems", "WarningTime" }, 180, config.isInt);
+            config.setDefault(new string[] { "Essentials", "PlayerProtect", "Enabled" }, true, config.isBoolean);
+            config.setDefault(new string[] { "Essentials", "PlayerProtect", "Time" }, 10, config.isInt);
             this.Save();
         }
 

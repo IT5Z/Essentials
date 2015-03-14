@@ -20,15 +20,20 @@ namespace Essentials
             DefaultLang.Add("autosave.message", "服务器自动保存完成");
             DefaultLang.Add("autoresetitems.message", "服务器已刷新地面物品");
             DefaultLang.Add("autoresetitems.warningmessage", "服务器将在{0}秒内刷新地面物品，请拾好重要物品。");
+            DefaultLang.Add("playerprotect.message", "为了保护你的安全，你将在{0}秒后被传送回原位置。");
             DefaultLang.Add("commands.generic.player.notFound", "找不到玩家");
             DefaultLang.Add("commands.essreload.message", "已重载Essentials");
+            DefaultLang.Add("commands.freeze.sender.on", "已冻结{0}");
+            DefaultLang.Add("commands.freeze.sender.off", "已解冻{0}");
+            DefaultLang.Add("commands.freeze.target.on", "你已被{0}冻结");
+            DefaultLang.Add("commands.freeze.target.off", "你已被{0}解冻");
             DefaultLang.Add("commands.kill.message", "已处死{0}");
             DefaultLang.Add("commands.resetitems.message", "已刷新地面物品");
             DefaultLang.Add("commands.vanish.sender.on", "已开启{0}的隐身");
             DefaultLang.Add("commands.vanish.sender.off", "已关闭{0}的隐身");
             DefaultLang.Add("commands.vanish.target.on", "你已被{0}开启隐身");
             DefaultLang.Add("commands.vanish.target.off", "你已被{0}关闭隐身");
-            DefaultLang.Add("commands.whois.info", "角色名称: {0} | Steam名称: {1} | 存档ID: {2}");
+            DefaultLang.Add("commands.whois.info", "角色名称: {0} | Steam名称: {1} | 存档ID: {2} | 位置: {3}");
             DefaultLang.Add("commands.whois.buff", "死亡: {0} | 出血: {1} | 骨折: {2} | 冻伤: {3} | 氧气: {4}%");
             DefaultLang.Add("commands.whois.state", "血量: {0}% | 饱食: {1}% | 含水: {2}% | 健康: {3}% | 耐力: {4}%");
         }
