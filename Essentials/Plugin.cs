@@ -203,7 +203,7 @@ namespace Essentials
 
         public void Update()
         {
-            if (RocketPlugin.Loaded)
+            if (this.Loaded)
             {
                 this.autoSave();
                 this.autoResetItems();
