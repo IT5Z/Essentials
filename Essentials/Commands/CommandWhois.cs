@@ -5,45 +5,61 @@ using System.Text;
 using System.Threading.Tasks;
 using SDG;
 using Rocket.RocketAPI;
+using Steamworks;
 using Essentials.Extensions;
-using UnityEngine;
 
 namespace Essentials.Commands
 {
-    class CommandWhois : Command
+    class CommandWhois : IRocketCommand
     {
-        public CommandWhois()
+        public bool RunFromConsole
         {
-            base.commandName = "Whois";
-            base.commandHelp = "Display Player Information";
-            base.commandInfo = "Whois [SteamID | Player]";
+            get
+            {
+                return true;
+            }
         }
 
-        protected override void execute(SteamPlayerID sender, string args)
+        public string Name
         {
-            if (!string.IsNullOrEmpty(args))
+            get
+            {
+                return "whois";
+            }
+        }
+
+        public string Help
+        {
+            get
+            {
+                return "Display Player Information";
+            }
+        }
+
+        public void Execute(CSteamID caller, string command)
+        {
+            if (!string.IsNullOrEmpty(command))
             {
                 SteamPlayer p;
-                if (SteamPlayerlist.tryGetSteamPlayer(args, out p))
+                if (PlayerTool.tryGetSteamPlayer(command, out p))
                 {
                     SteamPlayerID pi = p.SteamPlayerID;
                     string[] info = pi.ToString().Split(' ');
                     string position = p.Player.transform.position.ToString();
                     PlayerLife life = p.Player.PlayerLife;
-                    RocketChatManager.Say(sender.CSteamID, "commands.whois.info".I18N(pi.CharacterName, pi.SteamName, info[1] + "-" + info[2], position.Substring(1, position.Length - 2)));
-                    RocketChatManager.Say(sender.CSteamID, "commands.whois.buff".I18N(life.Dead, life.Bleeding, life.Broken, life.Freezing, life.Breath));
-                    RocketChatManager.Say(sender.CSteamID, "commands.whois.state".I18N(life.getBlood(), life.Hunger, life.Thirst, life.Infection, life.Stamina));
+                    RocketChatManager.Say(caller, "commands.whois.info".I18N(pi.CharacterName, pi.SteamName, info[1] + "-" + info[2], position.Substring(1, position.Length - 2)));
+                    RocketChatManager.Say(caller, "commands.whois.buff".I18N(life.Dead, life.Bleeding, life.Broken, life.Freezing, life.Breath));
+                    RocketChatManager.Say(caller, "commands.whois.state".I18N(life.getBlood(), life.Hunger, life.Thirst, life.Infection, life.Stamina));
                 }
                 else
                 {
-                    RocketChatManager.Say(sender.CSteamID, "commands.generic.player.notFound".I18N());
+                    RocketChatManager.Say(caller, "commands.generic.player.notFound".I18N());
                 }
             }
             else
             {
-                RocketChatManager.Say(sender.CSteamID, base.commandInfo);
+                RocketChatManager.Say(caller, "Whois [SteamID | Player]");
             }
-            base.execute(sender, args);
         }
     }
 }

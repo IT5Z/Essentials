@@ -7,64 +7,82 @@ using SDG;
 using UnityEngine;
 using Rocket.RocketAPI;
 using Rocket.Logging;
+using Steamworks;
 using Essentials.Extensions;
 
 namespace Essentials.Commands
 {
-    class CommandFreeze : Command
+    class CommandFreeze : IRocketCommand
     {
-        public CommandFreeze()
+        public bool RunFromConsole
         {
-            base.commandName = "Freeze";
-            base.commandHelp = "Toggles freeze";
-            base.commandInfo = "Freeze [SteamID | Player]";
+            get
+            {
+                return true;
+            }
         }
 
-        protected override void execute(SteamPlayerID sender, string args)
+        public string Name
         {
-            if (!string.IsNullOrEmpty(args))
+            get
+            {
+                return "freeze";
+            }
+        }
+
+        public string Help
+        {
+            get
+            {
+                return "Toggles freeze";
+            }
+        }
+
+        public void Execute(CSteamID caller, string command)
+        {
+            if (!string.IsNullOrEmpty(command))
             {
                 Dictionary<ulong, Vector3> players = Plugin.instance.frozenPlayers;
                 if (players != null)
                 {
                     SteamPlayer steamplayer;
-                    if (SteamPlayerlist.tryGetSteamPlayer(args, out steamplayer))
+                    if (PlayerTool.tryGetSteamPlayer(command, out steamplayer))
                     {
                         SteamPlayerID playerid = steamplayer.SteamPlayerID;
                         ulong steamid = playerid.CSteamID.m_SteamID;
-                        string name = playerid.CharacterName;
+                        string playername = playerid.CharacterName;
+                        string sendername = PlayerTool.getSteamPlayer(caller).SteamPlayerID.CharacterName;
                         if (players.ContainsKey(steamid))
                         {
                             players.Remove(steamid);
-                            RocketChatManager.Say(sender.CSteamID, "commands.freeze.sender.off".I18N(name));
-                            if (steamid != sender.CSteamID.m_SteamID)
+                            RocketChatManager.Say(caller, "commands.freeze.sender.off".I18N(playername));
+                            if (steamid != caller.m_SteamID)
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "commands.freeze.target.off".I18N(sender.CharacterName));
+                                RocketChatManager.Say(playerid.CSteamID, "commands.freeze.target.off".I18N(sendername));
                             }
-                            Logger.Log("Freeze " + name);
+                            Logger.Log("Freeze " + playername);
                         }
                         else
                         {
                             players.Add(steamid, steamplayer.Player.transform.position);
-                            RocketChatManager.Say(sender.CSteamID, "commands.freeze.sender.on".I18N(name));
-                            if (steamid != sender.CSteamID.m_SteamID)
+                            RocketChatManager.Say(caller, "commands.freeze.sender.on".I18N(playername));
+                            if (steamid != caller.m_SteamID)
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "commands.freeze.target.on".I18N(sender.CharacterName));
+                                RocketChatManager.Say(playerid.CSteamID, "commands.freeze.target.on".I18N(sendername));
                             }
-                            Logger.Log("Unfreeze " + name);
+                            Logger.Log("Unfreeze " + playername);
                         }
                     }
                     else
                     {
-                        RocketChatManager.Say(sender.CSteamID, "commands.generic.player.notFound".I18N());
+                        RocketChatManager.Say(caller, "commands.generic.player.notFound".I18N());
                     }
                 }
             }
             else
             {
-                RocketChatManager.Say(sender.CSteamID, base.commandInfo);
+                RocketChatManager.Say(caller, "Freeze [SteamID | Player]");
             }
-            base.execute(sender, args);
         }
     }
 }

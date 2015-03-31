@@ -22,6 +22,7 @@ namespace Essentials
             DefaultLang.Add("autoresetitems.warningmessage", "服务器将在{0}秒内刷新地面物品，请拾好重要物品。");
             DefaultLang.Add("playerprotect.message", "为了保护你的安全，你将在{0}秒后被传送回原位置。");
             DefaultLang.Add("commands.generic.player.notFound", "找不到玩家");
+            DefaultLang.Add("commands.generic.args.invalid", "非法的参数");
             DefaultLang.Add("commands.essreload.message", "已重载Essentials");
             DefaultLang.Add("commands.freeze.sender.on", "已冻结{0}");
             DefaultLang.Add("commands.freeze.sender.off", "已解冻{0}");
@@ -29,6 +30,8 @@ namespace Essentials
             DefaultLang.Add("commands.freeze.target.off", "你已被{0}解冻");
             DefaultLang.Add("commands.kill.message", "已处死{0}");
             DefaultLang.Add("commands.resetitems.message", "已刷新地面物品");
+            DefaultLang.Add("commands.tppos.sender.message", "已传送{0}到坐标{1}");
+            DefaultLang.Add("commands.tppos.target.message", "你已被{0}传送到坐标{1}");
             DefaultLang.Add("commands.vanish.sender.on", "已开启{0}的隐身");
             DefaultLang.Add("commands.vanish.sender.off", "已关闭{0}的隐身");
             DefaultLang.Add("commands.vanish.target.on", "你已被{0}开启隐身");

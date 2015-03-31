@@ -58,6 +58,7 @@
     <Compile Include="Commands\CommandFreeze.cs" />
     <Compile Include="Commands\CommandKill.cs" />
     <Compile Include="Commands\CommandResetItems.cs" />
+    <Compile Include="Commands\CommandTpPos.cs" />
     <Compile Include="Commands\CommandVanish.cs" />
     <Compile Include="Commands\CommandWhois.cs" />
     <Compile Include="ConfigManager\Config.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Extensions\ItemManagerExtensions.cs" />
     <Compile Include="Extensions\ItemRegionExtensions.cs" />
     <Compile Include="Extensions\PlayerLifeExtensions.cs" />
+    <Compile Include="Extensions\RocketPlayerFeaturesExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="I18N.cs" />
     <Compile Include="Model\ProtectInfo.cs" />
@@ -74,6 +76,9 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>COPY /Y "$(TargetDir)$(TargetName).*" "D:\unturned_server\Servers\world\Rocket\Plugins\"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

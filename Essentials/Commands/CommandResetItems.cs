@@ -7,25 +7,42 @@ using SDG;
 using System.Reflection;
 using Rocket.RocketAPI;
 using Rocket.Logging;
+using Steamworks;
 using Essentials.Extensions;
 
 namespace Essentials.Commands
 {
-    class CommandResetItems : Command
+    class CommandResetItems : IRocketCommand
     {
-        public CommandResetItems()
+        public bool RunFromConsole
         {
-            base.commandName = "ResetItems";
-            base.commandHelp = "Reset ground items";
-            base.commandInfo = "ResetItems";
+            get
+            {
+                return true;
+            }
         }
 
-        protected override void execute(SteamPlayerID sender, string args)
+        public string Name
+        {
+            get
+            {
+                return "resetitems";
+            }
+        }
+
+        public string Help
+        {
+            get
+            {
+                return "Reset ground items";
+            }
+        }
+
+        public void Execute(CSteamID caller, string command)
         {
             Util.ResetItems();
-            RocketChatManager.Say(sender.CSteamID, "commands.resetitems.message".I18N());
-            Logger.Log(sender.CharacterName + " reset ground items");
-            base.execute(sender, args);
+            RocketChatManager.Say(caller, "commands.resetitems.message".I18N());
+            Logger.Log(PlayerTool.getSteamPlayer(caller).SteamPlayerID.CharacterName + " reset ground items");
         }
     }
 }

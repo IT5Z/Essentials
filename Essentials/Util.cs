@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SDG;
 using System.Reflection;
@@ -11,7 +12,7 @@ using Essentials.Extensions;
 
 namespace Essentials
 {
-    class Util
+    static class Util
     {
         public static string getPluginFilePath(string filename)
         {
@@ -93,6 +94,36 @@ namespace Essentials
                 }
             }
             return true;
+        }
+
+        public static float parsePosition(string expression, float origin)
+        {
+            Regex regex = new Regex(@"^~(([+-])(\d+))?$");
+            if (regex.IsMatch(expression))
+            {
+                GroupCollection groups = regex.Match(expression).Groups;
+                if (!string.IsNullOrEmpty(groups[1].Value))
+                {
+                    int number = int.Parse(groups[3].Value);
+                    switch (groups[2].Value)
+                    {
+                        case "+":
+                            return origin + number;
+                        case "-":
+                            return origin - number;
+                        default:
+                            return origin;
+                    }
+                }
+                else
+                {
+                    return origin;
+                }
+            }
+            else
+            {
+                return int.Parse(expression);
+            }
         }
     }
 }

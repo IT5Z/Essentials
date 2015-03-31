@@ -6,64 +6,82 @@ using System.Threading.Tasks;
 using SDG;
 using Rocket.RocketAPI;
 using Rocket.Logging;
+using Steamworks;
 using Essentials.Extensions;
 
 namespace Essentials.Commands
 {
-    class CommandVanish : Command
+    class CommandVanish : IRocketCommand
     {
-        public CommandVanish()
+        public bool RunFromConsole
         {
-            base.commandName = "Vanish";
-            base.commandHelp = "Toggles invisibility";
-            base.commandInfo = "Vanish [SteamID | Player]";
+            get
+            {
+                return true;
+            }
         }
 
-        protected override void execute(SteamPlayerID sender, string args)
+        public string Name
         {
-            if (!string.IsNullOrEmpty(args))
+            get
+            {
+                return "vanish";
+            }
+        }
+
+        public string Help
+        {
+            get
+            {
+                return "Toggles invisibility";
+            }
+        }
+
+        public void Execute(CSteamID caller, string command)
+        {
+            if (!string.IsNullOrEmpty(command))
             {
                 HashSet<ulong> players = Plugin.instance.vanishedPlayers;
                 if (players != null)
                 {
                     SteamPlayer steamplayer;
-                    if (SteamPlayerlist.tryGetSteamPlayer(args, out steamplayer))
+                    if (PlayerTool.tryGetSteamPlayer(command, out steamplayer))
                     {
                         SteamPlayerID playerid = steamplayer.SteamPlayerID;
                         ulong steamid = playerid.CSteamID.m_SteamID;
-                        string name = playerid.CharacterName;
+                        string playername = playerid.CharacterName;
+                        string sendername = PlayerTool.getSteamPlayer(caller).SteamPlayerID.CharacterName;
                         if (players.Contains(steamid))
                         {
                             players.Remove(steamid);
-                            RocketChatManager.Say(sender.CSteamID, "commands.vanish.sender.off".I18N(name));
-                            if (steamid != sender.CSteamID.m_SteamID)
+                            RocketChatManager.Say(caller, "commands.vanish.sender.off".I18N(playername));
+                            if (steamid != caller.m_SteamID)
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.off".I18N(sender.CharacterName));
+                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.off".I18N(sendername));
                             }
-                            Logger.Log(name + " closed stealth");
+                            Logger.Log(playername + " closed stealth");
                         }
                         else
                         {
                             players.Add(steamid);
-                            RocketChatManager.Say(sender.CSteamID, "commands.vanish.sender.on".I18N(name));
-                            if (steamid != sender.CSteamID.m_SteamID)
+                            RocketChatManager.Say(caller, "commands.vanish.sender.on".I18N(playername));
+                            if (steamid != caller.m_SteamID)
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.on".I18N(sender.CharacterName));
+                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.on".I18N(sendername));
                             }
-                            Logger.Log(name + " opened stealth");
+                            Logger.Log(playername + " opened stealth");
                         }
                     }
                     else
                     {
-                        RocketChatManager.Say(sender.CSteamID, "commands.generic.player.notFound".I18N());
+                        RocketChatManager.Say(caller, "commands.generic.player.notFound".I18N());
                     }
                 }
             }
             else
             {
-                RocketChatManager.Say(sender.CSteamID, base.commandInfo);
+                RocketChatManager.Say(caller, "Vanish [SteamID | Player]");
             }
-            base.execute(sender, args);
         }
     }
 }

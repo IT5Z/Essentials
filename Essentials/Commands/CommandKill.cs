@@ -6,39 +6,56 @@ using System.Threading.Tasks;
 using SDG;
 using Rocket.RocketAPI;
 using UnityEngine;
+using Steamworks;
 using Essentials.Extensions;
 
 namespace Essentials.Commands
 {
-    class CommandKill : Command
+    class CommandKill : IRocketCommand
     {
-        public CommandKill()
+        public bool RunFromConsole
         {
-            base.commandName = "Kill";
-            base.commandHelp = "Kill designated player";
-            base.commandInfo = "Kill [SteamID | Player]";
+            get
+            {
+                return true;
+            }
         }
 
-        protected override void execute(SteamPlayerID sender, string args)
+        public string Name
         {
-            if (!string.IsNullOrEmpty(args))
+            get
+            {
+                return "kill";
+            }
+        }
+
+        public string Help
+        {
+            get
+            {
+                return "Kill designated player";
+            }
+        }
+
+        public void Execute(CSteamID caller, string command)
+        {
+            if (!string.IsNullOrEmpty(command))
             {
                 SteamPlayer p;
-                if (SteamPlayerlist.tryGetSteamPlayer(args, out p))
+                if (PlayerTool.tryGetSteamPlayer(command, out p))
                 {
-                    p.Player.PlayerLife.askDamage(100, Vector3.up * 10f, EDeathCause.KILL, ELimb.SKULL, sender.CSteamID);
-                    RocketChatManager.Say(sender.CSteamID, "commands.kill.message".I18N(p.SteamPlayerID.CharacterName));
+                    p.Player.PlayerLife.askDamage(100, Vector3.up * 10f, EDeathCause.KILL, ELimb.SKULL, caller);
+                    RocketChatManager.Say(caller, "commands.kill.message".I18N(p.SteamPlayerID.CharacterName));
                 }
                 else
                 {
-                    RocketChatManager.Say(sender.CSteamID, "commands.generic.player.notFound".I18N());
+                    RocketChatManager.Say(caller, "commands.generic.player.notFound".I18N());
                 }
             }
             else
             {
-                RocketChatManager.Say(sender.CSteamID, base.commandInfo);
+                RocketChatManager.Say(caller, "Kill [SteamID | Player]");
             }
-            base.execute(sender, args);
         }
     }
 }
