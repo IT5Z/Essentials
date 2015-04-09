@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using SDG;
 using Rocket.RocketAPI;
 using UnityEngine;
-using Steamworks;
 using Essentials.Extensions;
 
 namespace Essentials.Commands
@@ -37,7 +36,7 @@ namespace Essentials.Commands
             }
         }
 
-        public void Execute(CSteamID caller, string command)
+        public void Execute(RocketPlayer caller, string command)
         {
             string[] componentsFromSerial = Parser.getComponentsFromSerial(command, '/');
             int length = componentsFromSerial.Length;
@@ -47,7 +46,7 @@ namespace Essentials.Commands
                 switch (length)
                 {
                     case 3:
-                        player = PlayerTool.getPlayer(caller);
+                        player = caller.Player;
                         break;
                     case 4:
                         player = PlayerTool.getPlayer(componentsFromSerial[0]);
@@ -65,9 +64,9 @@ namespace Essentials.Commands
                         string target = string.Format("{0}, {1}, {2}", x, y, z);
                         SteamPlayerID steamplayerid = player.SteamChannel.SteamPlayer.SteamPlayerID;
                         RocketChatManager.Say(caller, "commands.tppos.sender.message".I18N(steamplayerid.CharacterName, target));
-                        if (caller.m_SteamID != steamplayerid.CSteamID.m_SteamID)
+                        if (caller.CSteamID.m_SteamID != steamplayerid.CSteamID.m_SteamID)
                         {
-                            RocketChatManager.Say(steamplayerid.CSteamID, "commands.tppos.target.message".I18N(PlayerTool.getSteamPlayer(caller).SteamPlayerID.CharacterName, target));
+                            RocketChatManager.Say(steamplayerid.CSteamID, "commands.tppos.target.message".I18N(caller.CharacterName, target));
                         }
                     }
                     catch (FormatException)

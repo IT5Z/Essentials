@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using SDG;
 using Rocket.RocketAPI;
 using Rocket.Logging;
-using Steamworks;
 using Essentials.Extensions;
 
 namespace Essentials.Commands
@@ -37,7 +36,7 @@ namespace Essentials.Commands
             }
         }
 
-        public void Execute(CSteamID caller, string command)
+        public void Execute(RocketPlayer caller, string command)
         {
             if (!string.IsNullOrEmpty(command))
             {
@@ -50,14 +49,13 @@ namespace Essentials.Commands
                         SteamPlayerID playerid = steamplayer.SteamPlayerID;
                         ulong steamid = playerid.CSteamID.m_SteamID;
                         string playername = playerid.CharacterName;
-                        string sendername = PlayerTool.getSteamPlayer(caller).SteamPlayerID.CharacterName;
                         if (players.Contains(steamid))
                         {
                             players.Remove(steamid);
                             RocketChatManager.Say(caller, "commands.vanish.sender.off".I18N(playername));
-                            if (steamid != caller.m_SteamID)
+                            if (steamid != caller.CSteamID.m_SteamID)
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.off".I18N(sendername));
+                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.off".I18N(caller.CharacterName));
                             }
                             Logger.Log(playername + " closed stealth");
                         }
@@ -65,9 +63,9 @@ namespace Essentials.Commands
                         {
                             players.Add(steamid);
                             RocketChatManager.Say(caller, "commands.vanish.sender.on".I18N(playername));
-                            if (steamid != caller.m_SteamID)
+                            if (steamid != caller.CSteamID.m_SteamID)
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.on".I18N(sendername));
+                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.on".I18N(caller.CharacterName));
                             }
                             Logger.Log(playername + " opened stealth");
                         }

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using SDG;
 using Rocket.RocketAPI;
 using Rocket.Logging;
-using Steamworks;
 using Essentials.Extensions;
 
 namespace Essentials.Commands
@@ -37,12 +36,12 @@ namespace Essentials.Commands
             }
         }
 
-        public void Execute(CSteamID caller, string command)
+        public void Execute(RocketPlayer caller, string command)
         {
             Plugin.instance.MainConfig.Load();
             Plugin.instance.I18N.Load();
             RocketChatManager.Say(caller, "commands.essreload.message".I18N());
-            Logger.Log(PlayerTool.getSteamPlayer(caller).SteamPlayerID.CharacterName + " reload essentials");
+            Logger.Log(caller.CharacterName + " reload essentials");
         }
     }
 }

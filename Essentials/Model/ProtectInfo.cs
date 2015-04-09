@@ -7,16 +7,16 @@ using UnityEngine;
 
 namespace Essentials.Model
 {
-    class ProtectInfo
+    struct ProtectInfo
     {
         public Vector3 position;
-        public byte angle;
+        public float rotation;
         public DateTime time;
 
-        public ProtectInfo(Vector3 position, byte angle, DateTime time)
+        public ProtectInfo(Vector3 position, float angle, DateTime time)
         {
             this.position = position;
-            this.angle = angle;
+            this.rotation = angle;
             this.time = time;
         }
     }

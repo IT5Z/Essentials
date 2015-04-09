@@ -7,11 +7,12 @@ using Rocket.Logging;
 using Rocket.RocketAPI;
 using Rocket.RocketAPI.Events;
 using SDG;
+using UnityEngine;
+using Steamworks;
 using Essentials.Commands;
 using Essentials.ConfigManager;
 using Essentials.Extensions;
 using Essentials.Model;
-using UnityEngine;
 
 namespace Essentials
 {
@@ -62,25 +63,25 @@ namespace Essentials
             base.Load();
         }
 
-        public void playerJoin(Player player)
+        public void playerJoin(RocketPlayer player)
         {
             if (MainConfig.PlayerProtectEnabled)
             {
-                RocketChatManager.Say(player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID, "playerprotect.message".I18N(MainConfig.PlayerProtectTime));
-                this.protectPlayers.Add(player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID.m_SteamID, new ProtectInfo(player.transform.position, MeasurementTool.angleToByte(player.transform.rotation.eulerAngles.y), DateTime.Now.AddSeconds(MainConfig.PlayerProtectTime)));
+                RocketChatManager.Say(player, "playerprotect.message".I18N(MainConfig.PlayerProtectTime));
+                this.protectPlayers.Add(player.CSteamID.m_SteamID, new ProtectInfo(player.Position, player.Rotation, DateTime.Now.AddSeconds(MainConfig.PlayerProtectTime)));
             }
         }
 
-        public void playerLeave(Player player)
+        public void playerLeave(RocketPlayer player)
         {
-            ulong steamid = player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID.m_SteamID;
+            ulong steamid = player.CSteamID.m_SteamID;
             frozenPlayers.Remove(steamid);
             vanishedPlayers.Remove(steamid);
             if (protectPlayers.ContainsKey(steamid))
             {
-                player.gameObject.transform.GetComponent<RocketPlayerFeatures>().setGodMode(false);
-                player.sendTeleport(protectPlayers[steamid].position, protectPlayers[steamid].angle);
-                player.save();
+                player.Features.setGodMode(false);
+                player.Teleport(protectPlayers[steamid].position, protectPlayers[steamid].rotation);
+                player.Player.save();
                 protectPlayers.Remove(steamid);
             }
         }
@@ -137,22 +138,22 @@ namespace Essentials
                 foreach (ulong steamid in keys)
                 {
                     ProtectInfo info = this.protectPlayers[steamid];
-                    if (steamid != 0 && info != null)
+                    if (steamid != 0)
                     {
-                        SteamPlayer steamplayer;
-                        if (PlayerTool.tryGetSteamPlayer(steamid.ToString(), out steamplayer))
+                        RocketPlayer player = RocketPlayer.FromCSteamID(new CSteamID(steamid));
+                        if (player != null)
                         {
                             try
                             {
                                 if (DateTime.Now < info.time)
                                 {
-                                    steamplayer.Player.gameObject.transform.GetComponent<RocketPlayerFeatures>().setGodMode(true);
-                                    steamplayer.Player.sendTeleport(new Vector3(0, 24, 0), 0);
+                                    player.Features.setGodMode(true);
+                                    player.Teleport(new Vector3(0, 24, 0), 0);
                                 }
                                 else
                                 {
-                                    steamplayer.Player.gameObject.transform.GetComponent<RocketPlayerFeatures>().setGodMode(false);
-                                    steamplayer.Player.sendTeleport(info.position, info.angle);
+                                    player.Features.setGodMode(false);
+                                    player.Teleport(info.position, info.rotation);
                                     this.protectPlayers.Remove(steamid);
                                 }
                             }

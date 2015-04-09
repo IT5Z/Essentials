@@ -7,7 +7,6 @@ using SDG;
 using System.Reflection;
 using Rocket.RocketAPI;
 using Rocket.Logging;
-using Steamworks;
 using Essentials.Extensions;
 
 namespace Essentials.Commands
@@ -38,11 +37,11 @@ namespace Essentials.Commands
             }
         }
 
-        public void Execute(CSteamID caller, string command)
+        public void Execute(RocketPlayer caller, string command)
         {
             Util.ResetItems();
             RocketChatManager.Say(caller, "commands.resetitems.message".I18N());
-            Logger.Log(PlayerTool.getSteamPlayer(caller).SteamPlayerID.CharacterName + " reset ground items");
+            Logger.Log(caller.CharacterName + " reset ground items");
         }
     }
 }
