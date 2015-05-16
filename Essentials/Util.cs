@@ -22,21 +22,27 @@ namespace Essentials
         public static void ResetItems()
         {
             ItemManager manager = ItemManagerExtensions.getItemManager();
-            ItemRegion[,] temp = ItemManagerExtensions.getItemRegion();
-            manager.resetItems();
             ItemRegion[,] region = ItemManagerExtensions.getItemRegion();
             for (byte b = 0; b < region.GetLength(0); b ++)
             {
                 for (byte b2 = 0; b2 < region.GetLength(1); b2++)
                 {
-                    foreach (ItemData data in temp[b, b2].getItemData())
+                    for (int num = region[b, b2].getItemData().Count; num >= 0; num--)
                     {
-                        manager.SteamChannel.send("tellTakeItem", ESteamCall.CLIENTS, b, b2, 1, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, data.getVector3() });
+                        manager.SteamChannel.send("tellTakeItem", ESteamCall.CLIENTS, b, b2, 1, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, num });
                     }
+                }
+            }
+            manager.resetItems();
+            region = ItemManagerExtensions.getItemRegion();
+            for (byte b = 0; b < region.GetLength(0); b++)
+            {
+                for (byte b2 = 0; b2 < region.GetLength(1); b2++)
+                {
                     foreach (ItemData data in region[b, b2].getItemData())
                     {
 
-                        manager.SteamChannel.send("tellItem", ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, data.getItem().ItemID, data.getItem().Metadata, data.getVector3() });
+                        manager.SteamChannel.send("tellItem", ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, data.getItem().ItemID, data.getItem().Durability, data.getItem().Metadata, data.getVector3() });
                     }
                 }
             }

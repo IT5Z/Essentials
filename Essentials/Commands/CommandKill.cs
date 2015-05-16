@@ -36,14 +36,15 @@ namespace Essentials.Commands
             }
         }
 
-        public void Execute(RocketPlayer caller, string command)
+        public void Execute(RocketPlayer caller, string[] command)
         {
-            if (!string.IsNullOrEmpty(command))
+            if (command.Length == 1)
             {
                 SteamPlayer p;
-                if (PlayerTool.tryGetSteamPlayer(command, out p))
+                if (PlayerTool.tryGetSteamPlayer(command[0], out p))
                 {
-                    p.Player.PlayerLife.askDamage(100, Vector3.up * 10f, EDeathCause.KILL, ELimb.SKULL, caller.CSteamID);
+                    EPlayerKill ePlayerKill;
+                    p.Player.PlayerLife.askDamage(100, Vector3.up * 10f, EDeathCause.KILL, ELimb.SKULL, caller.CSteamID, out ePlayerKill);
                     RocketChatManager.Say(caller, "commands.kill.message".I18N(p.SteamPlayerID.CharacterName));
                 }
                 else

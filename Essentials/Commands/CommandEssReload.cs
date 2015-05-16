@@ -36,7 +36,7 @@ namespace Essentials.Commands
             }
         }
 
-        public void Execute(RocketPlayer caller, string command)
+        public void Execute(RocketPlayer caller, string[] command)
         {
             Plugin.instance.MainConfig.Load();
             Plugin.instance.I18N.Load();

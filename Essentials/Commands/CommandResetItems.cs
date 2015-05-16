@@ -37,7 +37,7 @@ namespace Essentials.Commands
             }
         }
 
-        public void Execute(RocketPlayer caller, string command)
+        public void Execute(RocketPlayer caller, string[] command)
         {
             Util.ResetItems();
             RocketChatManager.Say(caller, "commands.resetitems.message".I18N());

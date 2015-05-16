@@ -36,12 +36,12 @@ namespace Essentials.Commands
             }
         }
 
-        public void Execute(RocketPlayer caller, string command)
+        public void Execute(RocketPlayer caller, string[] command)
         {
-            if (!string.IsNullOrEmpty(command))
+            if (command.Length == 1)
             {
                 SteamPlayer p;
-                if (PlayerTool.tryGetSteamPlayer(command, out p))
+                if (PlayerTool.tryGetSteamPlayer(command[0], out p))
                 {
                     SteamPlayerID pi = p.SteamPlayerID;
                     Vector3 position = p.Player.transform.position;

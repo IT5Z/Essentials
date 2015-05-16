@@ -36,20 +36,18 @@ namespace Essentials.Commands
             }
         }
 
-        public void Execute(RocketPlayer caller, string command)
+        public void Execute(RocketPlayer caller, string[] command)
         {
-            string[] componentsFromSerial = Parser.getComponentsFromSerial(command, '/');
-            int length = componentsFromSerial.Length;
-            if (length == 3 || length == 4)
+            if (command.Length == 3 || command.Length == 4)
             {
                 Player player = null;
-                switch (length)
+                switch (command.Length)
                 {
                     case 3:
                         player = caller.Player;
                         break;
                     case 4:
-                        player = PlayerTool.getPlayer(componentsFromSerial[0]);
+                        player = PlayerTool.getPlayer(command[0]);
                         break;
                 }
                 if (player != null)
@@ -57,9 +55,9 @@ namespace Essentials.Commands
                     try
                     {
                         Vector3 position = player.transform.position;
-                        float x = Util.parsePosition(componentsFromSerial[length - 3], position.x);
-                        float y = Util.parsePosition(componentsFromSerial[length - 2], position.y);
-                        float z = Util.parsePosition(componentsFromSerial[length - 1], position.z);
+                        float x = Util.parsePosition(command[command.Length - 3], position.x);
+                        float y = Util.parsePosition(command[command.Length - 2], position.y);
+                        float z = Util.parsePosition(command[command.Length - 1], position.z);
                         player.sendTeleport(new Vector3(x, y, z), MeasurementTool.angleToByte(player.transform.rotation.eulerAngles.y));
                         string target = string.Format("{0}, {1}, {2}", x, y, z);
                         SteamPlayerID steamplayerid = player.SteamChannel.SteamPlayer.SteamPlayerID;
@@ -81,7 +79,7 @@ namespace Essentials.Commands
             }
             else
             {
-                RocketChatManager.Say(caller, "TpPos <SteamID | Player>/[X]/[Y]/[Z]");
+                RocketChatManager.Say(caller, "TpPos <SteamID | Player> [X] [Y] [Z]");
             }
         }
     }

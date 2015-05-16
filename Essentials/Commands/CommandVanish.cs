@@ -36,15 +36,15 @@ namespace Essentials.Commands
             }
         }
 
-        public void Execute(RocketPlayer caller, string command)
+        public void Execute(RocketPlayer caller, string[] command)
         {
-            if (!string.IsNullOrEmpty(command))
+            if (command.Length == 1)
             {
                 HashSet<ulong> players = Plugin.instance.vanishedPlayers;
                 if (players != null)
                 {
                     SteamPlayer steamplayer;
-                    if (PlayerTool.tryGetSteamPlayer(command, out steamplayer))
+                    if (PlayerTool.tryGetSteamPlayer(command[0], out steamplayer))
                     {
                         SteamPlayerID playerid = steamplayer.SteamPlayerID;
                         ulong steamid = playerid.CSteamID.m_SteamID;
