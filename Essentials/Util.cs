@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SDG;
 using System.Reflection;
-using Rocket;
+using Rocket.Unturned;
 using UnityEngine;
 using Essentials.Extensions;
 
@@ -16,7 +16,7 @@ namespace Essentials
     {
         public static string getPluginFilePath(string filename)
         {
-            return string.Format("{0}Plugins/{1}/{2}", RocketSettings.HomeFolder, typeof(Plugin).Assembly.GetName().Name, filename);
+            return string.Format("{0}Plugins/{1}/{2}", Implementation.Instance.HomeFolder, typeof(Plugin).Assembly.GetName().Name, filename);
         }
 
         public static void ResetItems()

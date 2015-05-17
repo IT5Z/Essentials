@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SDG;
-using Rocket.RocketAPI;
+using Rocket.Unturned;
+using Rocket.Unturned.Commands;
+using Rocket.Unturned.Player;
 using UnityEngine;
 using Essentials.Extensions;
 
@@ -45,16 +47,16 @@ namespace Essentials.Commands
                 {
                     EPlayerKill ePlayerKill;
                     p.Player.PlayerLife.askDamage(100, Vector3.up * 10f, EDeathCause.KILL, ELimb.SKULL, caller.CSteamID, out ePlayerKill);
-                    RocketChatManager.Say(caller, "commands.kill.message".I18N(p.SteamPlayerID.CharacterName));
+                    RocketChat.Say(caller, "commands.kill.message".I18N(p.SteamPlayerID.CharacterName));
                 }
                 else
                 {
-                    RocketChatManager.Say(caller, "commands.generic.player.notFound".I18N());
+                    RocketChat.Say(caller, "commands.generic.player.notFound".I18N());
                 }
             }
             else
             {
-                RocketChatManager.Say(caller, "Kill [SteamID | Player]");
+                RocketChat.Say(caller, "Kill [SteamID | Player]");
             }
         }
     }

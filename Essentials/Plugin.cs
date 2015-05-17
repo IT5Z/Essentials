@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Rocket.Logging;
-using Rocket.RocketAPI;
-using Rocket.RocketAPI.Events;
+using Rocket.Unturned;
+using Rocket.Unturned.Plugins;
+using Rocket.Unturned.Logging;
+using Rocket.Unturned.Player;
+using Rocket.Unturned.Events;
 using SDG;
 using UnityEngine;
 using Steamworks;
@@ -67,7 +69,7 @@ namespace Essentials
         {
             if (MainConfig.PlayerProtectEnabled)
             {
-                RocketChatManager.Say(player, "playerprotect.message".I18N(MainConfig.PlayerProtectTime));
+                RocketChat.Say(player, "playerprotect.message".I18N(MainConfig.PlayerProtectTime));
                 this.protectPlayers.Add(player.CSteamID.m_SteamID, new ProtectInfo(player.Position, player.Rotation, DateTime.Now.AddSeconds(MainConfig.PlayerProtectTime)));
             }
         }
@@ -97,7 +99,7 @@ namespace Essentials
                 if(DateTime.Now >= autosaveTime)
                 {
                     SaveManager.save();
-                    RocketChatManager.Say("autosave.message".I18N());
+                    RocketChat.Say("autosave.message".I18N());
                     this.autosaveTime = DateTime.Now.AddSeconds(this.MainConfig.AutoSaveInterval);
                 }
             }
@@ -114,13 +116,13 @@ namespace Essentials
                 if(DateTime.Now >= autoresetitemsTime)
                 {
                     Util.ResetItems();
-                    RocketChatManager.Say("autoresetitems.message".I18N());
+                    RocketChat.Say("autoresetitems.message".I18N());
                     this.autoresetitemsTime = DateTime.Now.AddSeconds(this.MainConfig.AutoResetItemsInterval);
                     this.resetitemswarningSend = false;
                 }
                 if (!this.resetitemswarningSend && (autoresetitemsTime.Value - DateTime.Now).TotalSeconds <= this.MainConfig.AutoResetItemsWarningTime)
                 {
-                    RocketChatManager.Say("autoresetitems.warningmessage".I18N(this.MainConfig.AutoResetItemsWarningTime));
+                    RocketChat.Say("autoresetitems.warningmessage".I18N(this.MainConfig.AutoResetItemsWarningTime));
                     this.resetitemswarningSend = true;
                 }
             }

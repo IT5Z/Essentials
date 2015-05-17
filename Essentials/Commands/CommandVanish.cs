@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SDG;
-using Rocket.RocketAPI;
-using Rocket.Logging;
+using Rocket.Unturned;
+using Rocket.Unturned.Commands;
+using Rocket.Unturned.Logging;
+using Rocket.Unturned.Player;
 using Essentials.Extensions;
 
 namespace Essentials.Commands
@@ -52,33 +54,33 @@ namespace Essentials.Commands
                         if (players.Contains(steamid))
                         {
                             players.Remove(steamid);
-                            RocketChatManager.Say(caller, "commands.vanish.sender.off".I18N(playername));
+                            RocketChat.Say(caller, "commands.vanish.sender.off".I18N(playername));
                             if (steamid != caller.CSteamID.m_SteamID)
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.off".I18N(caller.CharacterName));
+                                RocketChat.Say(playerid.CSteamID, "commands.vanish.target.off".I18N(caller.CharacterName));
                             }
                             Logger.Log(playername + " closed stealth");
                         }
                         else
                         {
                             players.Add(steamid);
-                            RocketChatManager.Say(caller, "commands.vanish.sender.on".I18N(playername));
+                            RocketChat.Say(caller, "commands.vanish.sender.on".I18N(playername));
                             if (steamid != caller.CSteamID.m_SteamID)
                             {
-                                RocketChatManager.Say(playerid.CSteamID, "commands.vanish.target.on".I18N(caller.CharacterName));
+                                RocketChat.Say(playerid.CSteamID, "commands.vanish.target.on".I18N(caller.CharacterName));
                             }
                             Logger.Log(playername + " opened stealth");
                         }
                     }
                     else
                     {
-                        RocketChatManager.Say(caller, "commands.generic.player.notFound".I18N());
+                        RocketChat.Say(caller, "commands.generic.player.notFound".I18N());
                     }
                 }
             }
             else
             {
-                RocketChatManager.Say(caller, "Vanish [SteamID | Player]");
+                RocketChat.Say(caller, "Vanish [SteamID | Player]");
             }
         }
     }

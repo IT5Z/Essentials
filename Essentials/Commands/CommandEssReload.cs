@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SDG;
-using Rocket.RocketAPI;
-using Rocket.Logging;
+using Rocket.Unturned;
+using Rocket.Unturned.Commands;
+using Rocket.Unturned.Logging;
+using Rocket.Unturned.Player;
 using Essentials.Extensions;
 
 namespace Essentials.Commands
@@ -40,7 +42,7 @@ namespace Essentials.Commands
         {
             Plugin.instance.MainConfig.Load();
             Plugin.instance.I18N.Load();
-            RocketChatManager.Say(caller, "commands.essreload.message".I18N());
+            RocketChat.Say(caller, "commands.essreload.message".I18N());
             Logger.Log(caller.CharacterName + " reload essentials");
         }
     }

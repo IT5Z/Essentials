@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SDG;
-using Rocket.RocketAPI;
+using Rocket.Unturned;
+using Rocket.Unturned.Commands;
+using Rocket.Unturned.Player;
 using UnityEngine;
 using Essentials.Extensions;
 
@@ -46,18 +48,18 @@ namespace Essentials.Commands
                     SteamPlayerID pi = p.SteamPlayerID;
                     Vector3 position = p.Player.transform.position;
                     PlayerLife life = p.Player.PlayerLife;
-                    RocketChatManager.Say(caller, "commands.whois.info".I18N(pi.CharacterName, pi.SteamName, pi.ToString().Split(' ')[1], string.Format("{0}, {1}, {2}", Convert.ToInt32(position.x), Convert.ToInt32(position.y), Convert.ToInt32(position.z))));
-                    RocketChatManager.Say(caller, "commands.whois.buff".I18N(life.Dead, life.Bleeding, life.Broken, life.Freezing, life.Breath));
-                    RocketChatManager.Say(caller, "commands.whois.state".I18N(life.getBlood(), life.Hunger, life.Thirst, life.Infection, life.Stamina));
+                    RocketChat.Say(caller, "commands.whois.info".I18N(pi.CharacterName, pi.SteamName, pi.ToString().Split(' ')[1], string.Format("{0}, {1}, {2}", Convert.ToInt32(position.x), Convert.ToInt32(position.y), Convert.ToInt32(position.z))));
+                    RocketChat.Say(caller, "commands.whois.buff".I18N(life.Dead, life.Bleeding, life.Broken, life.Freezing, life.Breath));
+                    RocketChat.Say(caller, "commands.whois.state".I18N(life.getBlood(), life.Hunger, life.Thirst, life.Infection, life.Stamina));
                 }
                 else
                 {
-                    RocketChatManager.Say(caller, "commands.generic.player.notFound".I18N());
+                    RocketChat.Say(caller, "commands.generic.player.notFound".I18N());
                 }
             }
             else
             {
-                RocketChatManager.Say(caller, "Whois [SteamID | Player]");
+                RocketChat.Say(caller, "Whois [SteamID | Player]");
             }
         }
     }
