@@ -27,9 +27,9 @@ namespace Essentials
             {
                 for (byte b2 = 0; b2 < region.GetLength(1); b2++)
                 {
-                    for (int num = region[b, b2].getItemData().Count; num >= 0; num--)
+                    foreach (ItemData data in region[b, b2].getItemData())
                     {
-                        manager.SteamChannel.send("tellTakeItem", ESteamCall.CLIENTS, b, b2, 1, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, num });
+                        manager.SteamChannel.send("tellTakeItem", ESteamCall.CLIENTS, b, b2, 1, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { b, b2, data.getVector3() });
                     }
                 }
             }
