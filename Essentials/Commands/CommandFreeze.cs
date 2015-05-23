@@ -60,7 +60,7 @@ namespace Essentials.Commands
                             {
                                 RocketChat.Say(playerid.CSteamID, "commands.freeze.target.off".I18N(caller.CharacterName));
                             }
-                            Logger.Log("Freeze " + playername);
+                            Logger.Log("Unfreeze " + playername);
                         }
                         else
                         {
@@ -70,7 +70,7 @@ namespace Essentials.Commands
                             {
                                 RocketChat.Say(playerid.CSteamID, "commands.freeze.target.on".I18N(caller.CharacterName));
                             }
-                            Logger.Log("Unfreeze " + playername);
+                            Logger.Log("Freeze " + playername);
                         }
                     }
                     else
