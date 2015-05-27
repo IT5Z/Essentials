@@ -38,12 +38,20 @@ namespace Essentials.Commands
             }
         }
 
+        public string Syntax
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+
         public void Execute(RocketPlayer caller, string[] command)
         {
             Plugin.instance.MainConfig.Load();
             Plugin.instance.I18N.Load();
             RocketChat.Say(caller, "commands.essreload.message".I18N());
-            Logger.Log(caller.CharacterName + " reload essentials");
+            Logger.Log(caller != null ? caller.CharacterName : "Console" + " reload essentials");
         }
     }
 }

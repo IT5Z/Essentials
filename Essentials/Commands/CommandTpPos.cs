@@ -38,6 +38,14 @@ namespace Essentials.Commands
             }
         }
 
+        public string Syntax
+        {
+            get
+            {
+                return "<SteamID | Player> [X] [Y] [Z]";
+            }
+        }
+
         public void Execute(RocketPlayer caller, string[] command)
         {
             if (command.Length == 3 || command.Length == 4)
@@ -46,7 +54,7 @@ namespace Essentials.Commands
                 switch (command.Length)
                 {
                     case 3:
-                        player = caller.Player;
+                        player = caller != null ? caller.Player : null;
                         break;
                     case 4:
                         player = PlayerTool.getPlayer(command[0]);

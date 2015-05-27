@@ -9,6 +9,7 @@ using Rocket.Unturned.Commands;
 using Rocket.Unturned.Player;
 using UnityEngine;
 using Essentials.Extensions;
+using Steamworks;
 
 namespace Essentials.Commands
 {
@@ -38,6 +39,14 @@ namespace Essentials.Commands
             }
         }
 
+        public string Syntax
+        {
+            get
+            {
+                return "[SteamID | Player]";
+            }
+        }
+
         public void Execute(RocketPlayer caller, string[] command)
         {
             if (command.Length == 1)
@@ -46,7 +55,7 @@ namespace Essentials.Commands
                 if (PlayerTool.tryGetSteamPlayer(command[0], out p))
                 {
                     EPlayerKill ePlayerKill;
-                    p.Player.PlayerLife.askDamage(100, Vector3.up * 10f, EDeathCause.KILL, ELimb.SKULL, caller.CSteamID, out ePlayerKill);
+                    p.Player.PlayerLife.askDamage(100, Vector3.up * 10f, EDeathCause.KILL, ELimb.SKULL, caller != null ? caller.CSteamID : new CSteamID(), out ePlayerKill);
                     RocketChat.Say(caller, "commands.kill.message".I18N(p.SteamPlayerID.CharacterName));
                 }
                 else

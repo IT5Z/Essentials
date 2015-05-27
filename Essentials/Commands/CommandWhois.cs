@@ -38,6 +38,14 @@ namespace Essentials.Commands
             }
         }
 
+        public string Syntax
+        {
+            get
+            {
+                return "[SteamID | Player]";
+            }
+        }
+
         public void Execute(RocketPlayer caller, string[] command)
         {
             if (command.Length == 1)

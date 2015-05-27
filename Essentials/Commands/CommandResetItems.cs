@@ -39,11 +39,19 @@ namespace Essentials.Commands
             }
         }
 
+        public string Syntax
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+
         public void Execute(RocketPlayer caller, string[] command)
         {
             Util.ResetItems();
             RocketChat.Say(caller, "commands.resetitems.message".I18N());
-            Logger.Log(caller.CharacterName + " reset ground items");
+            Logger.Log(caller != null ? caller.CharacterName : "Console" + " reset ground items");
         }
     }
 }

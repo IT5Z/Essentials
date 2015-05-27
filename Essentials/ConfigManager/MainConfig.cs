@@ -115,6 +115,19 @@ namespace Essentials.ConfigManager
             }
         }
 
+        public bool HideAdminEnabled
+        {
+            get
+            {
+                return config.getBoolean(new string[] { "Essentials", "HideAdmin", "Enabled" });
+            }
+
+            set
+            {
+                config.set(new string[] { "Essentials", "HideAdmin", "Enabled" }, value);
+            }
+        }
+
         public MainConfig()
         {
             this.Init();
@@ -131,6 +144,7 @@ namespace Essentials.ConfigManager
             config.setDefault(new string[] { "Essentials", "AutoResetItems", "WarningTime" }, 180, config.isInt);
             config.setDefault(new string[] { "Essentials", "PlayerProtect", "Enabled" }, true, config.isBoolean);
             config.setDefault(new string[] { "Essentials", "PlayerProtect", "Time" }, 10, config.isInt);
+            config.setDefault(new string[] { "Essentials", "HideAdmin", "Enabled" }, false, config.isBoolean);
             this.Save();
         }
 

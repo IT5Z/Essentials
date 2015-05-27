@@ -39,6 +39,14 @@ namespace Essentials.Commands
             }
         }
 
+        public string Syntax
+        {
+            get
+            {
+                return "[SteamID | Player]";
+            }
+        }
+
         public void Execute(RocketPlayer caller, string[] command)
         {
             if (command.Length == 1)
@@ -56,9 +64,9 @@ namespace Essentials.Commands
                         {
                             players.Remove(steamid);
                             RocketChat.Say(caller, "commands.freeze.sender.off".I18N(playername));
-                            if (steamid != caller.CSteamID.m_SteamID)
+                            if (caller == null || (steamid != caller.CSteamID.m_SteamID))
                             {
-                                RocketChat.Say(playerid.CSteamID, "commands.freeze.target.off".I18N(caller.CharacterName));
+                                RocketChat.Say(playerid.CSteamID, "commands.freeze.target.off".I18N(caller != null ? caller.CharacterName : "Console"));
                             }
                             Logger.Log("Unfreeze " + playername);
                         }
@@ -66,9 +74,9 @@ namespace Essentials.Commands
                         {
                             players.Add(steamid, steamplayer.Player.transform.position);
                             RocketChat.Say(caller, "commands.freeze.sender.on".I18N(playername));
-                            if (steamid != caller.CSteamID.m_SteamID)
+                            if (caller == null || (steamid != caller.CSteamID.m_SteamID))
                             {
-                                RocketChat.Say(playerid.CSteamID, "commands.freeze.target.on".I18N(caller.CharacterName));
+                                RocketChat.Say(playerid.CSteamID, "commands.freeze.target.on".I18N(caller != null ? caller.CharacterName : "Console"));
                             }
                             Logger.Log("Freeze " + playername);
                         }

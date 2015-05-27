@@ -207,6 +207,29 @@ namespace Essentials
             }
         }
 
+        public void hideadmin()
+        {
+            if (MainConfig.HideAdminEnabled)
+            {
+                SteamPlayer[] players = PlayerTool.getSteamPlayers();
+                HashSet<byte> adminids = new HashSet<byte>();
+                for (int i = 0; i < players.Length; i++)
+                {
+                    if (players[i].IsAdmin)
+                    {
+                        adminids.Add((byte)i);
+                    }
+                }
+                foreach (SteamPlayer player in players)
+                {
+                    foreach (byte adminid in adminids)
+                    {
+                        Steam.send(player.SteamPlayerID.CSteamID, player.IsAdmin ? ESteamPacket.ADMINED : ESteamPacket.UNADMINED, new byte[] { player.IsAdmin ? (byte)7 : (byte)8, adminid }, 2, 0);
+                    }
+                }
+            }
+        }
+
         public void Update()
         {
             if (this.Loaded)
@@ -216,6 +239,7 @@ namespace Essentials
                 this.protect();
                 this.freeze();
                 this.vanish();
+                this.hideadmin();
             }
         }
     }
