@@ -182,7 +182,7 @@ namespace Essentials
                     SteamPlayer p;
                     if (PlayerTool.tryGetSteamPlayer(item.Key.ToString(), out p))
                     {
-                        p.Player.Movement.SteamChannel.send("tellPosition", ESteamCall.OWNER, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { item.Value });
+                        p.Player.SteamChannel.send("tellPosition", ESteamCall.OWNER, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { item.Value });
                     }
                 }
             }
@@ -201,7 +201,7 @@ namespace Essentials
                     SteamPlayer p;
                     if (PlayerTool.tryGetSteamPlayer(steamid.ToString(), out p))
                     {
-                        p.Player.Movement.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER & ESteamCall.CLIENTS, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { Vector3.zero });
+                        p.Player.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER & ESteamCall.CLIENTS, ESteamPacket.UPDATE_UDP_BUFFER, new object[] { new Vector3(0f, -3f, 0f) });
                     }
                 }
             }
