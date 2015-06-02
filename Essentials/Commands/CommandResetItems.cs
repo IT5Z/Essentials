@@ -31,6 +31,14 @@ namespace Essentials.Commands
             }
         }
 
+        public List<string> Aliases
+        {
+            get
+            {
+                return new List<string>();
+            }
+        }
+
         public string Help
         {
             get
