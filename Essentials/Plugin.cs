@@ -8,7 +8,7 @@ using Rocket.Unturned.Plugins;
 using Rocket.Unturned.Logging;
 using Rocket.Unturned.Player;
 using Rocket.Unturned.Events;
-using SDG;
+using SDG.Unturned;
 using UnityEngine;
 using Steamworks;
 using Essentials.Commands;
